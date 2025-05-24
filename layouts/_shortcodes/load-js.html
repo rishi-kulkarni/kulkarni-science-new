@@ -1,0 +1,7 @@
+{{ $file := .Get 0 }}
+{{ $resource := .Page.Resources.GetMatch $file }}
+{{ if $resource }}
+<script>{{ $resource.Content | safeJS }}</script>
+{{ else }}
+<script>console.error("Could not load {{ $file }}");</script>
+{{ end }}
