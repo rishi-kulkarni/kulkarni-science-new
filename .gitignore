@@ -88,3 +88,5 @@ firebase.json
 
 # Local development
 hugo_stats.json
+
+digest.txt
