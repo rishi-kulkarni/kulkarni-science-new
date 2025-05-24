@@ -374,7 +374,7 @@ const initializePowerSimulation = () => {
         'power-coverslip-slider', 'power-coverslip-count',
         1, 20, 3, 1,
         'Coverslips imaged per group',
-        '<strong>Key insight:</strong> Our neuron measurements contain information about both coverslip means AND our measurement precision, but simple averaging throws away the precision information. We convert epistemic uncertainty (which we could quantify from within-coverslip variation) into what our t-test treats as aleatory variation. A proper analysis would separate true coverslip-to-coverslip variation from measurement uncertainty and weight coverslips by their precision.'
+        '<strong>Key insight:</strong> Our effect size estimate has uncertainty from two sources: (1) true variation between coverslip means within each group, and (2) measurement error in estimating each coverslip mean from finite neurons. By averaging neurons within coverslips, we roll both sources of uncertainty into a single number, reducing our ability to distinguish true biological variation from measurement imprecision.'
     );
 
     plotDiv.insertAdjacentHTML('beforebegin', sliderHTML);

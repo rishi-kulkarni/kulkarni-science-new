@@ -20,27 +20,24 @@ abstract: |
 links:
   - text: "Paper"
     url: "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010061"
-  - text: "Code" # If applicable
-    url: "https://github.com/rishi-kulkarni/hierarch" # Example link
-citation: "" # Optional: If you have a pre-formatted BibTeX or similar string for this specific paper
+  - text: "Code" 
+    url: "https://github.com/rishi-kulkarni/hierarch" 
+citation: "" 
 ---
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-{{< load-js "hierarchical-utils.js" >}}
+## A Motivating Example
 
-## The Experiment That Started It All
+We were studying how microglia affect neuronal networks using a standard imaging experiment: 3 mice, 3 coverslips per condition, about 20 neurons measured per coverslip. Our question: Does LPS activation significantly increase PNA signal?
 
-We were studying how microglia affect neuronal networks using a fairly standard imaging experiment. The setup was simple: 3 coverslips per condition, about 20 neurons measured per coverslip. Our question: Does LPS activation significantly increase PNA signal?
+The experimental design was straightforward, but choosing the right statistical analysis proved more challenging than anticipated.
 
-Seems straightforward, right? The analysis turned out to be trickier than expected.
+## Option 1: Pool All Neurons
 
-## Option 1: Pool All the Neurons
+A common approach in the literature is to treat all ~60 neurons per condition as independent observations. This maximizes sample size and often yields small p-values.
 
-Our first instinct was to treat all ~60 neurons per condition as independent observations. Big sample size, small p-values - what's not to like?
+However, neurons on the same coverslip share systematic effects: temperature fluctuations, media preparation, staining protocol variations. The analysis assumes 60 independent observations when we actually have 3 coverslips measured with different levels of precision.
 
-But here's the problem: neurons on the same coverslip share systematic effects. They experience the same temperature fluctuations, the same batch of media, the same subtle variations in staining protocol. We're not really measuring 60 independent neurons - we're measuring 3 coverslips with different levels of precision.
-
-This approach treats systematic variation as if it were random noise, which inflates Type I error rates and leads to results that don't replicate.
+This approach treats systematic variation as random noise, inflating Type I error rates and contributing to reproducibility issues. As you can see in the simulation below, this inflates Type I error rates significantly, leading to false positives.
 
 <div class="plot-container" style="margin: 20px 0;">
     <canvas id="type-i-error-plot"></canvas>
@@ -54,11 +51,9 @@ This approach treats systematic variation as if it were random noise, which infl
 
 ## Option 2: Average Within Coverslips
 
-OK, so let's be more careful. Average the 20 neurons per coverslip and analyze the 3 coverslip means. This respects the experimental structure, but something bothered us:
+The summary statistics approach averages the 20 neurons per coverslip and analyzes the 3 coverslip means. This respects the experimental structure and maintains proper Type I error control.
 
-**Why doesn't imaging more neurons per coverslip increase our statistical power?**
-
-More neurons should give us better estimates of each coverslip mean, which should make our test more sensitive. And it does help - but not nearly as much as we'd expect.
+However, this approach discards potentially useful information. When we summarize each coverslip to a single mean, we lose the uncertainty information that comes from knowing how variable the measurements were within each coverslip.
 
 <div class="plot-container" style="margin: 20px 0;">
     <canvas id="power-simulation"></canvas>
@@ -74,26 +69,74 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-The simulation shows the issue: when we take averages, we lose the uncertainty information that comes from knowing how variable the measurements were within each coverslip.
+The simulation illustrates the limitation: while imaging more neurons per coverslip does slightly improve power by reducing measurement error, the gains plateau quickly. More fundamentally, we're collapsing rich distributional information into point estimates, potentially sacrificing statistical power. 
 
-## Option 3: Mixed Models
+So if simple averaging discards useful information, what about more sophisticated approaches? Mixed models seem like the obvious next step.
 
-Linear mixed models seem purpose-built for this problem: neurons nested within coverslips. But with only 3 coverslips per group, these models break down. They try to estimate random effects with almost no data.
+## Option 3: What About Mixed Models?
+Linear mixed models seem purpose-built for hierarchical data like neurons nested within coverslips. They're widely used in biomedical research and explicitly account for multiple levels of variation.
 
-Plus, mixed models regularize estimates by shrinking them toward the overall mean. That's useful for prediction, but we want unbiased estimates for hypothesis testing.
+However, mixed models optimize for a different goal than hypothesis testing. Consider the distinction:
 
-## The Solution: Hierarchical Randomization
+* **Prediction**: What PNA signal would we expect from a new coverslip? Here, shrinking extreme estimates toward the population mean improves accuracy.
+* **Inference**: What's the true difference in mean PNA signal between LPS and control conditions? Here, shrinkage biases our effect size estimates in ways that depend on the model specification.
 
-The key insight is to combine two resampling approaches:
+Mixed models use partial pooling to regularize estimates - shrinking individual coverslip means toward the overall mean. This regularization reduces prediction error when estimating outcomes for new coverslips, but it changes the bias-variance trade-off for effect size estimation in ways that may not align with our inferential goals.
 
-1. **Bootstrap within coverslips** to estimate the uncertainty in each coverslip mean
-2. **Permute treatment labels only at the coverslip level** (where we actually assigned treatments)
+With only 3 coverslips per group, this problem compounds: mixed models struggle to reliably estimate variance components with so few clusters, and the regularization that improves prediction operates on different assumptions than those needed for unbiased causal inference.
 
-This uses all the data while respecting the dependencies in our design.
+The popularity of mixed models in biomedical research reflects their ability to "handle" hierarchical data, but handling hierarchical structure and optimizing for causal inference are different objectives.
 
-## Why This Worked
+## What We Really Need
+We need an approach that:
+- Maintains proper Type I error control (unlike pooling)
+- Uses all available information (unlike averaging) 
+- Optimizes for inference rather than prediction (unlike mixed models)
 
-Those extra neurons per coverslip *do* increase power - by giving us better estimates of each coverslip's true mean. Bootstrapping captures this benefit instead of discarding it. We only shuffle labels where it makes sense (coverslips, not individual neurons). No assumptions about data distributions. Works fine with just 3 coverslips per group.
+This leads us to hierarchical resampling.
+
+
+## The Solution: Hierarchical Resampling
+
+**Hierarchical randomization provides an exact (or approximately exact) test that works for any nested experimental design.** Rather than making distributional assumptions or discarding information, it directly simulates the null hypothesis while respecting the experimental structure.
+
+### The Method
+
+The approach combines two complementary resampling strategies:
+
+1. **Bootstrap within experimental units** (coverslips) to quantify measurement uncertainty from finite sampling of sub-units (neurons)
+2. **Permute treatment labels only at the level where randomization occurred** (coverslip level, where we actually assigned treatments)
+
+### Why This Is Approach Works
+
+This is a principled approach that:
+
+**Respects the experimental design**: We only shuffle labels where randomization actually happened. Since we assigned treatments to coverslips (not individual neurons), we only permute at the coverslip level.
+
+**Uses all available information**: Instead of collapsing rich distributional data into point estimates, bootstrapping captures the full uncertainty structure from our measurements.
+
+**Makes no distributional assumptions**: The test statistic distribution comes directly from the data-generating process under the null hypothesis, not from theoretical distributions that may not apply.
+
+**Provides exact Type I error control**: For any sample size, any distribution, any degree of imbalance - the test maintains nominal error rates because it directly simulates the null hypothesis.
+
+### The Key Insight
+
+Those extra neurons per coverslip *do* increase statistical power - by giving us more precise estimates of each coverslip's true mean. But traditional analyses either:
+- Ignore this precision information (averaging approaches)  
+- Conflate it with other sources of variation (pooling approaches)
+- Optimize for prediction rather than inference (mixed models)
+
+Hierarchical resampling captures this precision benefit while maintaining the proper experimental framework for causal inference.
+
+### Broad Applicability
+
+This framework extends to any nested design:
+- Neurons within coverslips within mice
+- Students within classrooms within schools  
+- Cells within wells within plates
+- Measurements within subjects within studies
+
+The principle remains the same: **bootstrap within units, permute between units at the randomization level**.
 
 ## Making It Practical
 

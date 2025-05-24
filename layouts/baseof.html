@@ -16,7 +16,13 @@
     {{ end }}
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+
+    {{ range .Resources.Match "*.js" }}
+    <script src="{{ .RelPermalink }}"></script>
+    {{ end }}
     
     {{ block "head" . }}{{ end }}
 </head>
