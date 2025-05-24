@@ -1,0 +1,64 @@
+baseURL = "https://rukulkarni.com"
+languageCode = "en-us"
+title = "Rishi Kulkarni"
+# theme = "kulkarni"
+
+[params]
+author = "Rishi Kulkarni"
+description = "Data science, machine learning, and computational biology"
+email = "rishi@kulkarni.science"
+github = "rishi-kulkarni"
+scholar = "6kilqX0AAAAJ"
+orcid = "0000-0002-6422-149X"
+headshot = "/images/headshot.png"
+position = "Senior Director, Machine Learning Engineering at IntelyCare"
+bio = """I develop machine learning systems for healthcare workforce optimization and create 
+statistical methods for experimental design. My research focuses on online learning, 
+hierarchical modeling, and computational approaches to biomedical data analysis."""
+
+[markup]
+[markup.goldmark]
+[markup.goldmark.renderer]
+unsafe = true # Allow raw HTML in markdown
+[markup.highlight]
+style = "github"
+lineNos = true
+lineNumbersInTable = false
+tabWidth = 4
+
+[menu]
+[[menu.main]]
+name = "Projects"
+url = "/projects/"
+weight = 10
+[[menu.main]]
+name = "Publications"
+url = "/publications/"
+weight = 20
+[[menu.main]]
+name = "Blog"
+url = "/blog/"
+weight = 30
+[[menu.main]]
+name = "CV"
+url = "/cv/"
+weight = 40
+
+[taxonomies]
+tag = "tags"
+author = "authors"
+
+[related]
+includeNewer = true
+threshold = 80
+toLower = true
+[[related.indices]]
+name = "tags"
+weight = 100
+[[related.indices]]
+name = "date"
+weight = 10
+
+[security]
+[security.funcs]
+getenv = ["^HUGO_", "^CI$"]

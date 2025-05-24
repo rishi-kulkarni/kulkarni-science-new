@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en" }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    
+    {{ if .Description }}
+    <meta name="description" content="{{ .Description }}">
+    {{ else if .Site.Params.description }}
+    <meta name="description" content="{{ .Site.Params.description }}">
+    {{ end }}
+    
+    {{ if .Keywords }}
+    <meta name="keywords" content="{{ delimit .Keywords "," }}">
+    {{ end }}
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+    
+    {{ block "head" . }}{{ end }}
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+            <nav>
+                <ul>
+                    {{ range .Site.Menus.main }}
+                    <li><a href="{{ .URL | relURL }}"{{ if $.IsMenuCurrent "main" . }} class="active"{{ end }}>{{ .Name }}</a></li>
+                    {{ end }}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    {{ block "hero" . }}{{ end }}
+
+    <main>
+        <div class="container">
+            {{ block "main" . }}{{ end }}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container"> 
+            <p>&copy; {{ now.Year }} {{ .Site.Params.author }} • {{ .Site.Params.description }}</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ]
+            });
+        });
+    </script>
+    
+    {{ block "scripts" . }}{{ end }}
+</body>
+</html>

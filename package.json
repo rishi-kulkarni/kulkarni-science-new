@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "katex": "^0.16.22",
+    "plotly.js-dist-min": "^3.0.1"
+  }
+}

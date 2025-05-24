@@ -1,0 +1,62 @@
+{{ define "main" }}
+<article>
+    <header class="single-meta">
+        <h1>{{ .Title }}</h1>
+        
+        {{ if .Params.authors }}
+        <div class="meta authors">{{ delimit .Params.authors ", " }}</div>
+        {{ end }}
+        
+        {{ if .Params.venue }}
+        <div class="meta venue">{{ .Params.venue }}{{ with .Params.year }} ({{ . }}){{ end }}</div>
+        {{ end }}
+        
+        {{ if .Date }}
+        <div class="meta date">{{ .Date.Format "January 2, 2006" }}</div>
+        {{ end }}
+        
+        {{ if .Params.abstract }}
+        <p class="abstract">{{ .Params.abstract }}</p>
+        {{ end }}
+        
+        {{ if .Params.tags }}
+        <div class="tags">
+            {{ range .Params.tags }}
+            <span class="tag">{{ . }}</span>
+            {{ end }}
+        </div>
+        {{ end }}
+        
+        {{ if .Params.links }}
+        <nav class="links">
+            {{ range .Params.links }}
+            <a href="{{ .url }}">{{ .text }}</a>
+            {{ end }}
+        </nav>
+        {{ end }}
+    </header>
+    
+    {{ .Content }}
+    
+    {{ if .Params.citation }}
+    <footer>
+        <h3>Citation</h3>
+        <pre><code>{{ .Params.citation }}</code></pre>
+    </footer>
+    {{ end }}
+</article>
+
+{{ $related := .Site.RegularPages.Related . | first 3 }}
+{{ if $related }}
+<aside>
+    <h3>Related</h3>
+    {{ range $related }}
+    <article>
+        <h4><a href="{{ .RelPermalink }}">{{ .Title }}</a></h4>
+        <div class="meta">{{ .Date.Format "January 2, 2006" }} • {{ .Section | title }}</div>
+        <p>{{ .Summary }}</p>
+    </article>
+    {{ end }}
+</aside>
+{{ end }}
+{{ end }}

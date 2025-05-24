@@ -1,0 +1,69 @@
+{{ define "main" }}
+<article class="single-content">
+    <header class="single-meta">
+        <h1>{{ .Title }}</h1>
+        {{ if .Date }}
+        <div class="date">{{ .Date.Format "January 2, 2006" }}</div>
+        {{ end }}
+        
+        {{ if .Params.authors }}
+        <div class="authors">{{ delimit .Params.authors ", " }}</div>
+        {{ end }}
+        
+        {{ if .Params.venue }}
+        <div class="venue">{{ .Params.venue }}{{ with .Params.year }} ({{ . }}){{ end }}</div>
+        {{ end }}
+        
+        {{ if .Params.abstract }}
+        <div class="abstract">
+            <strong>Abstract:</strong> {{ .Params.abstract }}
+        </div>
+        {{ end }}
+        
+        {{ if .Params.tags }}
+        <div class="tags">
+            {{ range .Params.tags }}
+            <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="tag">{{ . }}</a>
+            {{ end }}
+        </div>
+        {{ end }}
+        
+        {{ if .Params.links }}
+        <div class="links" style="margin-top: 1rem;">
+            {{ range .Params.links }}
+            <a href="{{ .url }}" class="btn-primary" style="margin-right: 0.5rem;">{{ .text }}</a>
+            {{ end }}
+        </div>
+        {{ end }}
+    </header>
+    
+    <div class="content">
+        {{ .Content }}
+    </div>
+    
+    {{ if .Params.citation }}
+    <div class="citation">
+        <h4>Citation</h4>
+        <pre><code>{{ .Params.citation }}</code></pre>
+    </div>
+    {{ end }}
+</article>
+
+{{ if .Site.Params.related }}
+{{ $related := .Site.RegularPages.Related . | first 3 }}
+{{ if $related }}
+<section>
+    <h3>Related</h3>
+    <div class="related-posts">
+        {{ range $related }}
+        <article>
+            <h4><a href="{{ .RelPermalink }}">{{ .Title }}</a></h4>
+            <div class="meta">{{ .Date.Format "January 2, 2006" }} • {{ .Section | title }}</div>
+            <p>{{ .Summary }}</p>
+        </article>
+        {{ end }}
+    </div>
+</section>
+{{ end }}
+{{ end }}
+{{ end }}

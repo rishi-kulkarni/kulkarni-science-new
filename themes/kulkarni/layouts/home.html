@@ -1,0 +1,131 @@
+{{ define "hero" }}
+<section class="hero">
+    <div class="container"> {{ if .Site.Params.headshot }}
+        <div class="hero-headshot">  <img src="{{ .Site.Params.headshot | relURL }}" alt="Headshot of {{ .Site.Params.author | default "the author" }}">
+        </div>
+        {{ end }}
+        <div class="hero-text-content"> <h1>{{ .Site.Params.author | safeHTML }}</h1>
+            <div class="position">{{ .Site.Params.position }}</div>
+            <p class="description">{{ .Site.Params.bio | safeHTML }}</p>
+            <div class="links"> 
+                <a href="mailto:{{ .Site.Params.email }}">{{ .Site.Params.email }}</a>
+                {{ with .Site.Params.github }}
+                <a href="https://github.com/{{ . }}">GitHub</a>
+                {{ end }}
+                {{ with .Site.Params.scholar }}
+                <a href="https://scholar.google.com/citations?user={{ . }}">Google Scholar</a>
+                {{ end }}
+                {{ with .Site.Params.orcid }}
+                <a href="https://orcid.org/{{ . }}">ORCID</a>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</section>
+{{ end }}
+
+{{ define "main" }}
+<!-- Research Areas -->
+<section>
+    <h2>Research Areas</h2>
+    <p>My work spans theoretical development and practical applications in statistical learning</p>
+    
+    <div class="research-areas">
+        <div class="research-area">
+            <h3>Bayesian Machine Learning</h3>
+            <p>Multi-armed bandits, hierarchical models, and uncertainty quantification in production ML systems</p>
+        </div>
+        <div class="research-area">
+            <h3>Statistical Methods</h3>
+            <p>Experimental design, resampling methods, and statistical software for nested data structures</p>
+        </div>
+        <div class="research-area">
+            <h3>Computational Biology</h3>
+            <p>Biostatistics, neuroscience applications, and bioinformatics tools for biological data analysis</p>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Projects -->
+<section>
+    <h2>Software & Tools</h2>
+    <p>Open-source packages for statistical analysis and machine learning applications</p>
+    
+    <div class="projects">
+        {{ range first 3 (where .Site.RegularPages "Section" "projects") }}
+        <div class="project">
+            <header>
+                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+                <p>{{ .Params.subtitle | default .Summary }}</p>
+            </header>
+            <div class="content">
+                <p>{{ .Params.description | default (.Summary | truncate 200) }}</p>
+                {{ if .Params.links }}
+                <div class="links">
+                    {{ range .Params.links }}
+                    <a href="{{ .url }}">{{ .text }}</a>
+                    {{ end }}
+                </div>
+                {{ end }}
+            </div>
+        </div>
+        {{ end }}
+    </div>
+    
+    {{ if gt (len (where .Site.RegularPages "Section" "projects")) 3 }}
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="/projects/" class="btn-primary">View All Projects</a>
+    </div>
+    {{ end }}
+</section>
+
+<!-- Recent Publications -->
+{{ $publications := first 3 (where .Site.RegularPages "Section" "publications") }}
+{{ if $publications }}
+<section class="publications">
+    <h2>Selected Publications</h2>
+    <p>Research in computational biology, statistical methods, and neuroscience</p>
+    
+    {{ range $publications }}
+    <article>
+        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        {{ with .Params.authors }}
+        <div class="authors">{{ delimit . ", " }}</div>
+        {{ end }}
+        {{ with .Params.venue }}
+        <div class="venue">{{ . }} {{ with $.Params.year }}({{ . }}){{ end }}</div>
+        {{ end }}
+        <p class="abstract">{{ .Params.abstract | default .Summary }}</p>
+    </article>
+    {{ end }}
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="/publications/" class="btn-primary">View All Publications</a>
+    </div>
+</section>
+{{ end }}
+
+<!-- Recent Blog Posts -->
+{{ $posts := first 3 (where .Site.RegularPages "Section" "blog") }}
+{{ if $posts }}
+<section class="posts">
+    <h2>Recent Articles</h2>
+    <p>Technical writing on statistical methods and research practices</p>
+    
+    {{ range $posts }}
+    <article>
+        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <div class="meta">{{ .Date.Format "January 2, 2006" }}</div>
+        <p class="excerpt">{{ .Summary }}</p>
+    </article>
+    {{ end }}
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="/blog/" class="btn-primary">View All Articles</a>
+    </div>
+</section>
+{{ end }}
+
+<!-- Custom homepage content -->
+{{ .Content }}
+{{ end }}
