@@ -139,7 +139,7 @@ img {
 
 /* Layout containers */
 .container {
-    max-width: 1080px;
+    max-width: 1140px;
     margin: 0 auto;
     padding: 0 2rem;
 }
@@ -586,7 +586,7 @@ section h2::after {
 }
 
 /* Footer */
-footer {
+.site-footer {
     background: linear-gradient(135deg, var(--text-primary) 0%, #374151 100%);
     color: var(--text-white);
     text-align: center;
@@ -594,7 +594,7 @@ footer {
     margin-top: 3rem;
 }
 
-footer p {
+.site-footer p {
     margin-bottom: 0;
     color: var(--text-white);
 }

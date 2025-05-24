@@ -25,6 +25,10 @@ style = "github"
 lineNos = true
 lineNumbersInTable = false
 tabWidth = 4
+[markup.tableOfContents]
+startLevel = 2
+endLevel = 4
+
 
 [menu]
 [[menu.main]]
@@ -56,9 +60,16 @@ toLower = true
 name = "tags"
 weight = 100
 [[related.indices]]
+name = "categories"
+weight = 100
+[[related.indices]]
 name = "date"
 weight = 10
 
 [security]
 [security.funcs]
 getenv = ["^HUGO_", "^CI$"]
+
+[sitemap]
+changefreq = "weekly"
+priority = 0.5

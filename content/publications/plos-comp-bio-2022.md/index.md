@@ -6,6 +6,22 @@ year: 2022
 date: 2022-05-02
 draft: false
 tags: ["Computational Biology", "Hierarchical Models", "Python"]
+
+description: "Learn how hierarchical resampling maintains Type I error control in nested experimental designs like neurons within coverslips. Python implementation included with statistical comparisons."
+keywords: ["hierarchical resampling", "nested experimental design", "Type I error", "bootstrap", "permutation test", "Python statistics", "biomedical research"]
+slug: "hierarchical-resampling-nested-experimental-designs"
+toc: true
+images: ["/images/hierarchical-resampling-preview.png"] 
+categories: ["Statistical Methods", "Publications"]
+series: ["Computational Biology"]
+featured: true
+lastmod: 2025-05-24
+
+# Social/Academic metadata
+doi: "10.1371/journal.pcbi.1010061"
+publication_type: "journal"
+academic_field: "Computational Biology"
+
 abstract: |
   While hierarchical experimental designs are near-ubiquitous in
   neuroscience and biomedical research, researchers often do not
@@ -17,12 +33,15 @@ abstract: |
   and generate confidence intervals that maintain the nominal
   coverage probability without making distributional assumptions
   about the dataset of interest.
+
 links:
   - text: "Paper"
     url: "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010061"
   - text: "Code" 
-    url: "https://github.com/rishi-kulkarni/hierarch" 
-citation: "" 
+    url: "https://github.com/rishi-kulkarni/hierarch"
+  - text: "DOI"
+    url: "https://doi.org/10.1371/journal.pcbi.1010061"
+citation: "Kulkarni, R. U., Wang, C. L., & Bertozzi, C. R. (2022). Analyzing nested experimental designs: A user-friendly resampling method to determine experimental significance. PLoS computational biology, 18(5), e1010061."
 ---
 
 ## A Motivating Example
@@ -40,7 +59,9 @@ However, neurons on the same coverslip share systematic effects: temperature flu
 This approach treats systematic variation as random noise, inflating Type I error rates and contributing to reproducibility issues. As you can see in the simulation below, this inflates Type I error rates significantly, leading to false positives.
 
 <div class="plot-container" style="margin: 20px 0;">
-    <canvas id="type-i-error-plot"></canvas>
+    <canvas id="type-i-error-plot"
+            aria-label="Simulation showing Type I error inflation when pooling nested data compared to proper hierarchical analysis methods">
+    </canvas>
 </div>
 
 <script>

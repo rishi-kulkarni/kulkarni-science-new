@@ -1,10 +1,72 @@
+{{ define "head" }}
+<!-- Blog post SEO -->
+{{ $description := "" }}
+{{ if .Params.description }}
+    {{ $description = .Params.description }}
+{{ else if .Summary }}
+    {{ $description = .Summary | truncate 160 }}
+{{ end }}
+
+<!-- Canonical URL -->
+<link rel="canonical" href="{{ .Permalink }}">
+
+<!-- Open Graph -->
+<meta property="og:title" content="{{ .Title }}">
+<meta property="og:description" content="{{ $description }}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
+{{ with .Params.images }}<meta property="og:image" content="{{ index . 0 | absURL }}">{{ end }}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ .Title }}">
+<meta name="twitter:description" content="{{ $description }}">
+{{ with .Params.images }}<meta name="twitter:image" content="{{ index . 0 | absURL }}">{{ end }}
+
+<!-- Article meta -->
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+{{ with .Params.lastmod }}<meta property="article:modified_time" content="{{ .Format "2006-01-02T15:04:05Z07:00" }}">{{ end }}
+{{ range .Params.authors }}<meta property="article:author" content="{{ . }}">{{ end }}
+{{ range .Params.tags }}<meta property="article:tag" content="{{ . }}">{{ end }}
+
+<!-- Structured Data for Blog Post -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ .Title }}",
+  "description": "{{ $description }}",
+  "author": [
+    {{ range $i, $author := .Params.authors }}
+    {{ if $i }},{{ end }}
+    {
+      "@type": "Person",
+      "name": "{{ $author }}"
+    }
+    {{ end }}
+  ],
+  "datePublished": "{{ .Date.Format "2006-01-02" }}",
+  {{ with .Params.lastmod }}"dateModified": "{{ .Format "2006-01-02" }}",{{ end }}
+  "url": "{{ .Permalink }}",
+  "mainEntityOfPage": "{{ .Permalink }}"
+  {{ with .Params.images }},"image": "{{ index . 0 | absURL }}"{{ end }}
+  {{ with .Params.keywords }},"keywords": {{ . | jsonify }}{{ end }}
+}
+</script>
+{{ end }}
+
 {{ define "main" }}
-<article>
+<article itemscope itemtype="https://schema.org/BlogPosting">
     <header class="single-meta">
-        <h1>{{ .Title }}</h1>
+        <h1 itemprop="headline">{{ .Title }}</h1>
         
         {{ if .Params.authors }}
-        <div class="meta authors">{{ delimit .Params.authors ", " }}</div>
+        <div class="meta authors">
+            {{ range $i, $author := .Params.authors }}
+            {{ if $i }}, {{ end }}<span itemprop="author" itemscope itemtype="https://schema.org/Person"><span itemprop="name">{{ $author }}</span></span>
+            {{ end }}
+        </div>
         {{ end }}
         
         {{ if .Params.venue }}
@@ -12,23 +74,27 @@
         {{ end }}
         
         {{ if .Date }}
-        <div class="meta date">{{ .Date.Format "January 2, 2006" }}</div>
+        <div class="meta date">
+            <time itemprop="datePublished" datetime="{{ .Date.Format "2006-01-02" }}">
+                {{ .Date.Format "January 2, 2006" }}
+            </time>
+        </div>
         {{ end }}
         
         {{ if .Params.abstract }}
-        <p class="abstract">{{ .Params.abstract }}</p>
+        <div class="abstract" itemprop="description">{{ .Params.abstract }}</div>
         {{ end }}
         
         {{ if .Params.tags }}
         <div class="tags">
             {{ range .Params.tags }}
-            <span class="tag">{{ . }}</span>
+            <span class="tag" itemprop="keywords">{{ . }}</span>
             {{ end }}
         </div>
         {{ end }}
         
         {{ if .Params.links }}
-        <nav class="links">
+        <nav class="links" aria-label="Related links">
             {{ range .Params.links }}
             <a href="{{ .url }}">{{ .text }}</a>
             {{ end }}
@@ -36,24 +102,29 @@
         {{ end }}
     </header>
     
-    {{ .Content }}
+    <div itemprop="articleBody">
+        {{ .Content }}
+    </div>
     
     {{ if .Params.citation }}
-    <footer>
+    <footer class="citation">
         <h3>Citation</h3>
-        <pre><code>{{ .Params.citation }}</code></pre>
+        <blockquote itemprop="citation">{{ .Params.citation }}</blockquote>
     </footer>
     {{ end }}
 </article>
 
 {{ $related := .Site.RegularPages.Related . | first 3 }}
 {{ if $related }}
-<aside>
-    <h3>Related</h3>
+<aside aria-label="Related articles">
+    <h2>Related Articles</h2>
     {{ range $related }}
-    <article>
-        <h4><a href="{{ .RelPermalink }}">{{ .Title }}</a></h4>
-        <div class="meta">{{ .Date.Format "January 2, 2006" }} • {{ .Section | title }}</div>
+    <article class="related-article">
+        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <div class="meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+            • {{ .Section | title }}
+        </div>
         <p>{{ .Summary }}</p>
     </article>
     {{ end }}
