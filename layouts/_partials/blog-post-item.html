@@ -1,0 +1,10 @@
+<article>
+    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    <div class="meta">
+        {{ .Date.Format "January 2, 2006" }}
+        {{ if .Params.tags }}
+        • {{ range $i, $tag := .Params.tags }}{{ if $i }}, {{ end }}<a href="{{ "/tags/" | relURL }}{{ $tag | urlize }}" class="tag-inline">{{ $tag }}</a>{{ end }}
+        {{ end }}
+    </div>
+    <p class="excerpt">{{ .Summary }}</p>
+</article>

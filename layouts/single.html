@@ -88,7 +88,7 @@
         {{ if .Params.tags }}
         <div class="tags">
             {{ range .Params.tags }}
-            <span class="tag" itemprop="keywords">{{ . }}</span>
+            <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="tag" itemprop="keywords">{{ . }}</a>
             {{ end }}
         </div>
         {{ end }}

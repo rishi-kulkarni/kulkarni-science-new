@@ -53,22 +53,7 @@
     
     <div class="projects">
         {{ range first 3 (where .Site.RegularPages "Section" "projects") }}
-        <div class="project">
-            <header>
-                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-                <p>{{ .Params.subtitle | default .Summary }}</p>
-            </header>
-            <div class="content">
-                <p>{{ .Params.description | default (.Summary | truncate 200) }}</p>
-                {{ if .Params.links }}
-                <div class="links">
-                    {{ range .Params.links }}
-                    <a href="{{ .url }}">{{ .text }}</a>
-                    {{ end }}
-                </div>
-                {{ end }}
-            </div>
-        </div>
+        {{ partial "project-card.html" . }}
         {{ end }}
     </div>
     
@@ -87,16 +72,7 @@
     <p>Research in computational biology, statistical methods, and neuroscience</p>
     
     {{ range $publications }}
-    <article>
-        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-        {{ with .Params.authors }}
-        <div class="meta authors">{{ delimit . ", " }}</div>
-        {{ end }}
-        {{ with .Params.venue }}
-        <div class="meta venue">{{ . }} {{ with $.Params.year }}({{ . }}){{ end }}</div>
-        {{ end }}
-        <p class="abstract">{{ .Params.abstract | default .Summary }}</p>
-    </article>
+    {{ partial "publication-item.html" . }}
     {{ end }}
     
     <div style="text-align: center; margin-top: 2rem;">
@@ -113,11 +89,7 @@
     <p>Technical writing on statistical methods and research practices</p>
     
     {{ range $posts }}
-    <article>
-        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-        <div class="meta">{{ .Date.Format "January 2, 2006" }}</div>
-        <p class="excerpt">{{ .Summary }}</p>
-    </article>
+    {{ partial "blog-post-item.html" . }}
     {{ end }}
     
     <div style="text-align: center; margin-top: 2rem;">

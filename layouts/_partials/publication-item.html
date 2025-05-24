@@ -1,0 +1,10 @@
+<article>
+    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    {{ with .Params.authors }}
+    <div class="meta authors">{{ delimit . ", " }}</div>
+    {{ end }}
+    {{ with .Params.venue }}
+    <div class="meta venue">{{ . }}{{ with $.Params.year }} ({{ . }}){{ end }}</div>
+    {{ end }}
+    <p class="abstract">{{ .Params.abstract | default .Summary }}</p>
+</article>

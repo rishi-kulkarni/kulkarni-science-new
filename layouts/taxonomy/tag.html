@@ -1,0 +1,47 @@
+{{ define "main" }}
+<div class="list-content">
+    <header>
+        <h1>Posts tagged "{{ .Title }}"</h1>
+        <p>{{ .Paginator.TotalNumberOfElements }} {{ if eq .Paginator.TotalNumberOfElements 1 }}item{{ else }}items{{ end }} found</p>
+    </header>
+    
+    {{ $groupedPages := .RegularPages.GroupBy "Section" }}
+    
+    {{ range $groupedPages }}
+    {{ if .Key }}
+    <section>
+        <h2>{{ .Key | title }}</h2>
+        
+        {{ if eq .Key "projects" }}
+        <div class="projects">
+            {{ range .Pages }}
+            {{ partial "project-card.html" . }}
+            {{ end }}
+        </div>
+        
+        {{ else if eq .Key "publications" }}
+        <div class="publications">
+            {{ range .Pages }}
+            {{ partial "publication-item.html" . }}
+            {{ end }}
+        </div>
+        
+        {{ else }}
+        <div class="posts">
+            {{ range .Pages }}
+            {{ partial "blog-post-item.html" . }}
+            {{ end }}
+        </div>
+        {{ end }}
+    </section>
+    {{ end }}
+    {{ end }}
+    
+    {{ if not .RegularPages }}
+    <div style="text-align: center; padding: 3rem 0;">
+        <h3>No content found with this tag</h3>
+        <p><a href="/tags/" class="btn-primary">Browse all tags</a></p>
+    </div>
+    {{ end }}
+</div>
+{{ end }}

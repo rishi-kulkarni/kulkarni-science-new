@@ -1,36 +1,27 @@
 :root {
-    --deep-purple: #3d2645;
-    --magenta: #832161;
-    --coral: #da4167;
-    --cream: #f0eff4;
-    --black: #000000;
-    
+    /* Core colors */
     --primary: #3d2645;
-    --primary-light: #f0eff4;
-    --primary-muted: #6d4d73;
     --secondary: #da4167;
-    --secondary-light: #fef7f9;
-    --secondary-muted: #e87397;
     --accent: #832161;
-    --accent-light: #f8f3f6;
-    --accent-muted: #a95d89;
     --tertiary: #000000;
-    --tertiary-light: #f9f9f9;
-    --tertiary-muted: #666666;
     
+    /* Text colors */
     --text-primary: #000000;
     --text-secondary: #3d2645;
     --text-muted: #832161;
     --text-white: #ffffff;
     
+    /* Background colors */
     --bg-primary: #ffffff;
     --bg-secondary: #f0eff4;
     --bg-accent: #fef7f9;
     --bg-hero: linear-gradient(135deg, #ffffff 0%, #f8f3f6 100%);
     
+    /* Borders */
     --border: #832161;
     --border-light: #e6d7dc;
     
+    /* Shadows */
     --shadow-sm: 0 2px 8px rgba(61, 38, 69, 0.08);
     --shadow-md: 0 4px 16px rgba(61, 38, 69, 0.12);
     --shadow-lg: 0 8px 32px rgba(61, 38, 69, 0.16);
@@ -99,7 +90,7 @@ blockquote {
     margin: 2rem 0;
     font-style: italic;
     color: var(--text-secondary);
-    background: var(--accent-light);
+    background: var(--bg-accent);
     padding: 1.5rem;
     border-radius: 8px;
 }
@@ -144,9 +135,9 @@ img {
     padding: 0 2rem;
 }
 
-/* Site Header - Fixed the class issue */
+/* Site Header */
 .site-header {
-    background: linear-gradient(135deg, var(--deep-purple) 0%, var(--magenta) 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
     color: var(--text-white);
     position: sticky;
     top: 0;
@@ -313,7 +304,7 @@ section h2::after {
     left: 0;
     width: 60px;
     height: 3px;
-    background: linear-gradient(90deg, var(--magenta), var(--coral));
+    background: linear-gradient(90deg, var(--accent), var(--secondary));
     border-radius: 2px;
 }
 
@@ -329,17 +320,17 @@ section h2::after {
     background: var(--bg-primary);
     border-radius: 8px;
     padding: 1.5rem;
-    border-left: 4px solid var(--coral);
+    border-left: 4px solid var(--secondary);
     box-shadow: var(--shadow-sm);
     transition: all 0.2s ease;
 }
 
 .research-area:nth-child(2) {
-    border-left-color: var(--magenta);
+    border-left-color: var(--accent);
 }
 
 .research-area:nth-child(3) {
-    border-left-color: var(--deep-purple);
+    border-left-color: var(--primary);
 }
 
 .research-area:hover {
@@ -368,7 +359,7 @@ section h2::after {
 }
 
 .project header {
-    background: linear-gradient(135deg, var(--cream), var(--secondary-light));
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-accent));
     padding: 1.5rem;
     position: static;
     box-shadow: none;
@@ -416,34 +407,55 @@ section h2::after {
     text-decoration: none;
 }
 
-/* Publications - keeping original look */
-.publications article {
+/* Unified article styling for publications and posts */
+.publications article,
+.posts article {
     background: var(--bg-primary);
     border-radius: 8px;
-    padding: 2rem;
-    margin: 1.5rem 0;
-    border-left: 4px solid var(--secondary);
+    padding: 1.5rem;
+    margin: 1rem 0;
     box-shadow: var(--shadow-sm);
     transition: all 0.2s ease;
 }
 
-.publications article:hover {
+.publications article {
+    padding: 2rem;
+    margin: 1.5rem 0;
+    border-left: 4px solid var(--secondary);
+}
+
+.posts article {
+    border-left: 4px solid var(--tertiary);
+}
+
+.publications article:hover,
+.posts article:hover {
     box-shadow: var(--shadow-md);
     transform: translateX(4px);
 }
 
-.publications article h3 {
+.publications article h3,
+.posts article h3 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
     line-height: 1.4;
 }
 
-.publications article h3 a {
+.publications article h3 a,
+.posts article h3 a {
     color: var(--text-primary);
     text-decoration: none;
 }
 
-/* Consolidated metadata styling - replaces .authors, .venue, .date */
+.posts article h3 {
+    font-size: 1.1rem;
+}
+
+.posts article h3 a:hover {
+    color: var(--tertiary);
+}
+
+/* Consolidated metadata styling */
 .meta {
     color: var(--text-secondary);
     margin-bottom: 0.5rem;
@@ -460,47 +472,16 @@ section h2::after {
     font-size: 0.9rem;
 }
 
-/* Abstract styling */
-.abstract {
+/* Abstract and excerpt styling */
+.abstract,
+.excerpt {
     color: var(--text-secondary);
     line-height: 1.6;
     margin-bottom: 0;
 }
 
-/* Blog posts */
-.posts article {
-    background: var(--bg-primary);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin: 1rem 0;
-    border-left: 4px solid var(--tertiary);
-    box-shadow: var(--shadow-sm);
-    transition: all 0.2s ease;
-}
-
-.posts article:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateX(4px);
-}
-
-.posts article h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-}
-
-.posts article h3 a {
-    color: var(--text-primary);
-    text-decoration: none;
-}
-
-.posts article h3 a:hover {
-    color: var(--tertiary);
-}
-
-.posts .excerpt {
-    color: var(--text-secondary);
+.excerpt {
     line-height: 1.5;
-    margin-bottom: 0;
 }
 
 /* Button styling */
@@ -516,14 +497,14 @@ section h2::after {
 }
 
 .btn-primary:hover {
-    background: var(--primary-muted);
+    background: var(--accent);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
     text-decoration: none;
     color: var(--text-white);
 }
 
-/* Single page content - keeping original styling */
+/* Single page content */
 .single-content {
     max-width: 800px;
     margin: 0 auto;
@@ -545,7 +526,7 @@ section h2::after {
 
 .single-meta .tag {
     display: inline-block;
-    background: var(--accent-light);
+    background: var(--bg-accent);
     color: var(--accent);
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
@@ -575,7 +556,7 @@ section h2::after {
 }
 
 .single-meta .links a:hover {
-    background: var(--primary-muted);
+    background: var(--accent);
     text-decoration: none;
 }
 
@@ -686,6 +667,79 @@ figcaption {
     border-left: 2px solid var(--border-light);
     margin: 1rem 0;
     font-size: 0.95rem;
+}
+
+/* Clickable tags */
+.tag {
+    display: inline-block;
+    background: var(--bg-accent);
+    color: var(--accent);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.tag:hover {
+    background: var(--accent);
+    color: var(--text-white);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+/* Inline tags in metadata */
+.tag-inline {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.tag-inline:hover {
+    color: var(--secondary);
+    text-decoration: underline;
+}
+
+/* Tag cloud for tags index */
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.tag-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-primary);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.tag-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+}
+
+.tag-name {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.tag-count {
+    background: var(--accent);
+    color: var(--text-white);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
 /* Responsive */
