@@ -1,0 +1,90 @@
+# Hugo build output
+public/
+resources/
+
+# Hugo cache directories
+.hugo_build.lock
+
+# Hugo modules
+go.sum
+_vendor/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*~
+\#*\#
+.\#*
+
+# Node.js dependencies (if using npm/yarn for asset processing)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Hugo server
+.hugo_build.lock
+
+# Build tools
+dist/
+build/
+
+# Logs
+*.log
+
+# Coverage reports
+coverage/
+
+# Local configuration files
+config/development/
+config/staging/
+config/production/
+
+# Backup files
+*.backup
+
+# Cache
+.cache/
+
+# Hugo documentation suggests ignoring these
+resources/_gen/
+
+# If using Firebase hosting
+.firebaserc
+firebase.json
+
+# If using Netlify
+.netlify/
+
+# If using Vercel
+.vercel/
+
+# Local development
+hugo_stats.json
