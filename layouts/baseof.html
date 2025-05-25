@@ -28,10 +28,17 @@
     
     {{ partial "js-optimization.html" . }}
 
-    <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+    {{/* Process CSS with Hugo Pipes */}}
+    {{ $css := resources.Get "css/style.css" }}
+    {{ $css = $css | minify | fingerprint }}
 
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $css.Data.Integrity }}"{{ end }}>
+
+    {{/* Process page-specific JS resources */}}
     {{ range .Resources.Match "*.js" }}
-    <script src="{{ .RelPermalink }}"></script>
+        {{ $js := . }}
+        {{ $js = $js | minify | fingerprint }}
+        <script src="{{ $js.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $js.Data.Integrity }}"{{ end }}></script>
     {{ end }}
 
     {{ partial "structured-data.html" . }}
@@ -53,7 +60,6 @@
         </div>
     </header>
 
-
     {{ block "hero" . }}{{ end }}
 
     <main id="main-content" role="main">
@@ -68,9 +74,10 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js"></script>
-    
+    {{/* Only load KaTeX when needed */}}
+    {{ if .Params.math }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js" defer></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             renderMathInElement(document.body, {
@@ -81,6 +88,7 @@
             });
         });
     </script>
+    {{ end }}
     
     {{ block "scripts" . }}{{ end }}
 </body>

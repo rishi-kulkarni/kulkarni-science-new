@@ -75,7 +75,6 @@ quality = 85
 resampleFilter = "Lanczos"
 anchor = "Smart"
 
-
 [minify]
 disableCSS = false
 disableHTML = false
@@ -93,3 +92,6 @@ keepQuotes = false
 articleSection = "blog"
 publisherName = "Rishi Kulkarni"
 publisherLogo = "/images/logo.png"
+
+[pagination]
+pagerSize = 2

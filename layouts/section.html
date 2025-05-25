@@ -9,16 +9,18 @@
         {{ end }}
     </header>
     
+    {{ $paginator := .Paginator }}
+    
     {{ if eq .Section "projects" }}
     <div class="projects">
-        {{ range .RegularPages }}
+        {{ range $paginator.Pages }}
         {{ partial "project-card.html" . }}
         {{ end }}
     </div>
     
     {{ else if eq .Section "publications" }}
     <div class="publications">
-        {{ range .RegularPages }}
+        {{ range $paginator.Pages }}
         {{ partial "publication-item.html" . }}
         {{ end }}
     </div>
@@ -26,10 +28,12 @@
     {{ else }}
     <!-- Default blog/article layout -->
     <div class="posts">
-        {{ range .RegularPages }}
-        {{ partial "publication-item.html" . }}
+        {{ range $paginator.Pages }}
+        {{ partial "blog-post-item.html" . }}
         {{ end }}
     </div>
     {{ end }}
+    
+    {{ template "_internal/pagination.html" . }}
 </div>
 {{ end }}

@@ -741,6 +741,43 @@ figcaption {
     font-weight: 600;
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 2rem 0;
+    gap: 0.5rem;
+}
+
+.pagination li {
+    margin: 0;
+}
+
+.pagination a,
+.pagination .page-link {
+    padding: 0.5rem 1rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.pagination a:hover {
+    background: var(--primary);
+    color: var(--text-white);
+}
+
+.pagination .active a {
+    background: var(--primary);
+    color: var(--text-white);
+}
+
+.pagination .disabled {
+    opacity: 0.5;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .container {
