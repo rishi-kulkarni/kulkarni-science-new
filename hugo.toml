@@ -94,4 +94,4 @@ publisherName = "Rishi Kulkarni"
 publisherLogo = "/images/logo.png"
 
 [pagination]
-pagerSize = 2
+pagerSize = 10

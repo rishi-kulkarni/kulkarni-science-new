@@ -2,40 +2,29 @@
 <div class="list-content">
     <header>
         <h1>Posts tagged "{{ .Title }}"</h1>
-        <p>{{ .Paginator.TotalNumberOfElements }} {{ if eq .Paginator.TotalNumberOfElements 1 }}item{{ else }}items{{ end }} found</p>
     </header>
     
-    {{ $groupedPages := .RegularPages.GroupBy "Section" }}
+    {{ $paginator := .Paginate .RegularPages }}
     
-    {{ range $groupedPages }}
-    {{ if .Key }}
-    <section>
-        <h2>{{ .Key | title }}</h2>
-        
-        {{ if eq .Key "projects" }}
-        <div class="projects">
-            {{ range .Pages }}
-            {{ partial "project-card.html" . }}
+    <p>{{ $paginator.TotalNumberOfElements }} {{ if eq $paginator.TotalNumberOfElements 1 }}item{{ else }}items{{ end }} found</p>
+    
+    <div class="mixed-content">
+        {{ range $paginator.Pages }}
+            {{ if eq .Section "projects" }}
+                {{ partial "project-card.html" . }}
+            {{ else if eq .Section "publications" }}
+                <div class="publications">
+                    {{ partial "publication-item.html" . }}
+                </div>
+            {{ else }}
+                <div class="posts">
+                    {{ partial "blog-post-item.html" . }}
+                </div>
             {{ end }}
-        </div>
-        
-        {{ else if eq .Key "publications" }}
-        <div class="publications">
-            {{ range .Pages }}
-            {{ partial "publication-item.html" . }}
-            {{ end }}
-        </div>
-        
-        {{ else }}
-        <div class="posts">
-            {{ range .Pages }}
-            {{ partial "blog-post-item.html" . }}
-            {{ end }}
-        </div>
         {{ end }}
-    </section>
-    {{ end }}
-    {{ end }}
+    </div>
+    
+    {{ template "_internal/pagination.html" . }}
     
     {{ if not .RegularPages }}
     <div style="text-align: center; padding: 3rem 0;">
