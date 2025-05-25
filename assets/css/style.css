@@ -541,6 +541,9 @@ section h2::after {
 
 .single-meta .links {
     margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .single-meta .links a {
