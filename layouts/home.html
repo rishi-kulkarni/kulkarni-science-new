@@ -1,6 +1,7 @@
 {{ define "hero" }}
 <section class="hero">
-    <div class="container"> {{ if .Site.Params.headshot }}
+    <div class="container"> 
+        {{ if .Site.Params.headshot }}
         <div class="hero-headshot">  <img src="{{ .Site.Params.headshot | relURL }}" alt="Headshot of {{ .Site.Params.author | default "the author" }}">
         </div>
         {{ end }}
@@ -32,11 +33,11 @@
     
     <div class="research-areas">
         <div class="research-area">
-            <h3>Bayesian Machine Learning</h3>
+            <h3>Bayes in Production</h3>
             <p>Multi-armed bandits, hierarchical models, and uncertainty quantification in production ML systems</p>
         </div>
         <div class="research-area">
-            <h3>Statistical Methods</h3>
+            <h3>Estimation</h3>
             <p>Experimental design, resampling methods, and statistical software for nested data structures</p>
         </div>
         <div class="research-area">
@@ -46,23 +47,22 @@
     </div>
 </section>
 
-<!-- Featured Projects -->
-<section>
-    <h2>Software & Tools</h2>
-    <p>Open-source packages for statistical analysis and machine learning applications</p>
-    
-    <div class="projects">
-        {{ range first 3 (where .Site.RegularPages "Section" "projects") }}
-        {{ partial "project-card.html" . }}
-        {{ end }}
-    </div>
-    
-    {{ if gt (len (where .Site.RegularPages "Section" "projects")) 3 }}
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="/projects/" class="btn-primary">View All Projects</a>
-    </div>
+<!-- Recent Blog Posts -->
+{{ $posts := first 3 (where .Site.RegularPages "Section" "blog") }}
+{{ if $posts }}
+<section class="posts">
+    <h2>Recent Articles</h2>
+    <p>Statistical learning, computational biology, and data science</p>
+
+    {{ range $posts }}
+    {{ partial "blog-post-item.html" . }}
     {{ end }}
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="/blog/" class="btn-primary">View All Articles</a>
+    </div>
 </section>
+{{ end }}
 
 <!-- Recent Publications -->
 {{ $publications := first 3 (where .Site.RegularPages "Section" "publications") }}
@@ -81,22 +81,7 @@
 </section>
 {{ end }}
 
-<!-- Recent Blog Posts -->
-{{ $posts := first 3 (where .Site.RegularPages "Section" "blog") }}
-{{ if $posts }}
-<section class="posts">
-    <h2>Recent Articles</h2>
-    <p>Technical writing on statistical methods and research practices</p>
-    
-    {{ range $posts }}
-    {{ partial "blog-post-item.html" . }}
-    {{ end }}
-    
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="/blog/" class="btn-primary">View All Articles</a>
-    </div>
-</section>
-{{ end }}
+
 
 <!-- Custom homepage content -->
 {{ .Content }}

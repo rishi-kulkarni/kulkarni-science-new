@@ -32,10 +32,6 @@ endLevel = 4
 
 [menu]
 [[menu.main]]
-name = "Projects"
-url = "/projects/"
-weight = 10
-[[menu.main]]
 name = "Publications"
 url = "/publications/"
 weight = 20

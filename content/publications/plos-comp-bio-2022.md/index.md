@@ -5,7 +5,7 @@ venue: "PLoS Computational Biology"
 year: 2022
 date: 2022-05-02
 draft: false
-tags: ["Computational Biology", "Hierarchical Models", "Python"]
+tags: ["computational biology", "biomedical research", "statistics", "resampling methods", "hypothesis testing", "python"]
 
 description: "Learn how hierarchical resampling maintains Type I error control in nested experimental designs like neurons within coverslips. Python implementation included with statistical comparisons."
 keywords: ["hierarchical resampling", "nested experimental design", "Type I error", "bootstrap", "permutation test", "Python statistics", "biomedical research"]
@@ -33,6 +33,10 @@ abstract: |
   and generate confidence intervals that maintain the nominal
   coverage probability without making distributional assumptions
   about the dataset of interest.
+
+summary: |
+  Hierarchical resampling is a powerful statistical method for analyzing arbitrarily nested experimental designs. This approach combines bootstrap resampling and permutation to control Type I error rates while preserving utilizing
+  all available information.
 
 links:
   - text: "Paper"

@@ -241,7 +241,6 @@ main {
 .hero .description {
     font-size: 1.05rem;
     margin-bottom: 1.5rem;
-    max-width: 700px;
     color: var(--text-secondary);
 }
 

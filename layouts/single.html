@@ -116,17 +116,14 @@
 
 {{ $related := .Site.RegularPages.Related . | first 3 }}
 {{ if $related }}
-<aside aria-label="Related articles">
-    <h2>Related Articles</h2>
+<aside aria-label="Related articles" class="posts">
+    <h2>Related Posts and Publications</h2>
     {{ range $related }}
-    <article class="related-article">
-        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-        <div class="meta">
-            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
-            • {{ .Section | title }}
-        </div>
-        <p>{{ .Summary }}</p>
-    </article>
+    {{ if eq .Section "blog" }}
+        {{ partial "blog-post-item.html" . }}
+    {{ else if eq .Section "publications" }}
+        {{ partial "publication-item.html" . }}
+    {{ end }}
     {{ end }}
 </aside>
 {{ end }}
