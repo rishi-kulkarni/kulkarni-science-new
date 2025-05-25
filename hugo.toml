@@ -69,3 +69,27 @@ getenv = ["^HUGO_", "^CI$"]
 [sitemap]
 changefreq = "weekly"
 priority = 0.5
+
+[imaging]
+quality = 85
+resampleFilter = "Lanczos"
+anchor = "Smart"
+
+
+[minify]
+disableCSS = false
+disableHTML = false
+disableJS = false
+disableJSON = false
+disableSVG = false
+disableXML = false
+
+[minify.tdewolff.html]
+keepDefaultAttrVals = true
+keepDocumentTags = true
+keepQuotes = false
+
+[params.seo]
+articleSection = "blog"
+publisherName = "Rishi Kulkarni"
+publisherLogo = "/images/logo.png"

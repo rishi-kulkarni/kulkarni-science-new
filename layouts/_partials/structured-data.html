@@ -1,0 +1,90 @@
+{{/* layouts/_partials/structured-data.html */}}
+{{ if .IsPage }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "{{ .Site.BaseURL }}#person",
+      "name": "{{ .Site.Params.author }}",
+      "email": "{{ .Site.Params.email }}",
+      "jobTitle": "{{ .Site.Params.position }}",
+      "url": "{{ .Site.BaseURL }}",
+      "sameAs": [
+        "https://github.com/{{ .Site.Params.github }}",
+        "https://scholar.google.com/citations?user={{ .Site.Params.scholar }}",
+        "https://orcid.org/{{ .Site.Params.orcid }}"
+      ],
+      "affiliation": {
+        "@type": "Organization",
+        "name": "IntelyCare"
+      }
+    },
+    {{ if eq .Section "publications" }}
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "{{ .Title }}",
+      "description": "{{ .Params.abstract | default .Summary | truncate 160 }}",
+      "author": [
+        {{ range $i, $author := .Params.authors }}
+        {{ if $i }},{{ end }}
+        {
+          "@type": "Person",
+          "name": "{{ $author }}"
+        }
+        {{ end }}
+      ],
+      "datePublished": "{{ .Date.Format "2006-01-02" }}",
+      {{ with .Params.venue }}
+      "publisher": {
+        "@type": "Organization",
+        "name": "{{ . }}"
+      },
+      {{ end }}
+      {{ with .Params.doi }}
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "DOI",
+        "value": "{{ . }}"
+      },
+      {{ end }}
+      "url": "{{ .Permalink }}",
+      "mainEntityOfPage": "{{ .Permalink }}"
+    }
+    {{ else }}
+    {
+      "@type": "BlogPosting",
+      "headline": "{{ .Title }}",
+      "description": "{{ .Params.description | default .Summary | truncate 160 }}",
+      "author": {
+        "@type": "Person",
+        "@id": "{{ .Site.BaseURL }}#person"
+      },
+      "publisher": {
+        "@type": "Person",
+        "@id": "{{ .Site.BaseURL }}#person"
+      },
+      "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
+      {{ with .Params.lastmod }}
+      "dateModified": "{{ .Format "2006-01-02T15:04:05Z07:00" }}",
+      {{ end }}
+      "url": "{{ .Permalink }}",
+      "mainEntityOfPage": "{{ .Permalink }}",
+      {{ with .Params.images }}
+      "image": {
+        "@type": "ImageObject",
+        "url": "{{ index . 0 | absURL }}"
+      },
+      {{ end }}
+      {{ with .Params.keywords }}
+      "keywords": {{ . | jsonify }},
+      {{ end }}
+      "articleSection": "{{ .Section | title }}",
+      "wordCount": {{ .WordCount }}
+    }
+    {{ end }}
+  ]
+}
+</script>
+{{ end }}

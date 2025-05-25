@@ -26,34 +26,37 @@
     <meta name="keywords" content="{{ delimit .Keywords "," }}">
     {{ end }}
     
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {{ partial "js-optimization.html" . }}
 
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
 
     {{ range .Resources.Match "*.js" }}
     <script src="{{ .RelPermalink }}"></script>
     {{ end }}
+
+    {{ partial "structured-data.html" . }}
     
     {{ block "head" . }}{{ end }}
 </head>
 <body>
+    {{ partial "accessibility.html" . }}
     <header class="site-header">
         <div class="container">
             <h1><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
-            <nav>
+            <nav aria-label="Main navigation">
                 <ul>
                     {{ range .Site.Menus.main }}
-                    <li><a href="{{ .URL | relURL }}"{{ if $.IsMenuCurrent "main" . }} class="active"{{ end }}>{{ .Name }}</a></li>
+                    <li><a href="{{ .URL | relURL }}"{{ if $.IsMenuCurrent "main" . }} aria-current="page"{{ else }} class="nav-link"{{ end }}>{{ .Name }}</a></li>
                     {{ end }}
                 </ul>
             </nav>
         </div>
     </header>
 
+
     {{ block "hero" . }}{{ end }}
 
-    <main>
+    <main id="main-content" role="main">
         <div class="container">
             {{ block "main" . }}{{ end }}
         </div>

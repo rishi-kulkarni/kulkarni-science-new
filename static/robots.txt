@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Optimize crawling
+Crawl-delay: 1
+
+# Block non-essential paths
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /api/
+
+# Sitemaps
+Sitemap: https://rukulkarni.com/sitemap.xml
+Sitemap: https://rukulkarni.com/sitemap-publications.xml

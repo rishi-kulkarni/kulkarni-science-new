@@ -1,0 +1,37 @@
+{{/* layouts/_partials/js-optimization.html */}}
+{{/* Only load Chart.js when needed */}}
+{{ if .Params.charts }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+{{ end }}
+
+{{/* Only load KaTeX when needed */}}
+{{ if .Params.math }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/contrib/auto-render.min.js" defer></script>
+{{ end }}
+
+{{/* Lazy load heavy simulation scripts */}}
+{{ if .Params.simulations }}
+<script>
+// Intersection Observer for lazy loading simulations
+const simulationObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const scriptUrl = entry.target.dataset.script;
+      const script = document.createElement('script');
+      script.src = scriptUrl;
+      script.defer = true;
+      document.head.appendChild(script);
+      simulationObserver.unobserve(entry.target);
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-script]').forEach(el => {
+    simulationObserver.observe(el);
+  });
+});
+</script>
+{{ end }}
