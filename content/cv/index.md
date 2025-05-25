@@ -17,6 +17,7 @@ layout: "single"
 
 ### Senior Director, Machine Learning Engineering
 **IntelyCare** | *2025 – Present*
+- Leading a team of data scientists, software engineers, and data engineers to develop the one-stop shop for nurses seeking job opportunities.
 
 ### Director, Data Science
 **IntelyCare** | *2023 – 2025*
@@ -50,11 +51,11 @@ layout: "single"
 
 ## Education
 
-### PhD, Chemistry
-**University of California, Berkeley** | *2013 – 2018*
+- **PhD, Chemistry**  
+  *University of California, Berkeley* | *2013 – 2018*
 
-### BA, Biochemistry and Molecular Biology
-**Boston University** | *2009 – 2013*
+- **BA, Biochemistry and Molecular Biology**
+  *Boston University* | *2009 – 2013*
 
 ---
 
