@@ -1,11 +1,13 @@
 baseURL = "https://rukulkarni.com"
 languageCode = "en-us"
-title = "Rishi Kulkarni"
-# theme = "kulkarni"
+title = "Rishi Kulkarni | Statistics & Machine Learning"
+enableRobotsTXT = true
+canonifyURLs = true
+summaryLength = 20
 
 [params]
 author = "Rishi Kulkarni"
-description = "Data science, machine learning, and computational biology"
+description = "Expert insights on statistical methods, hierarchical modeling, and computational biology from Rishi Kulkarni, PhD"
 email = "rishi@kulkarni.science"
 github = "rishi-kulkarni"
 scholar = "6kilqX0AAAAJ"
@@ -15,6 +17,11 @@ position = "Senior Director, Machine Learning Engineering at IntelyCare"
 bio = """I develop machine learning systems for healthcare workforce optimization and create 
 statistical methods for experimental design. My research focuses on online learning, 
 hierarchical modeling, and computational approaches to biomedical data analysis."""
+
+# SEO Parameters
+[params.seo]
+defaultImage = "/images/headshot.png"
+siteKeywords = "statistics, hierarchical modeling, computational biology, machine learning, experimental design, data science"
 
 [markup]
 [markup.goldmark]
@@ -87,11 +94,6 @@ disableXML = false
 keepDefaultAttrVals = true
 keepDocumentTags = true
 keepQuotes = false
-
-[params.seo]
-articleSection = "blog"
-publisherName = "Rishi Kulkarni"
-publisherLogo = "/images/logo.png"
 
 [pagination]
 pagerSize = 10

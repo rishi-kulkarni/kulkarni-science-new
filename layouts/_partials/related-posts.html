@@ -1,0 +1,22 @@
+{{/* layouts/_partials/related-posts.html */}}
+{{ $related := .Site.RegularPages.Related . | first 3 }}
+{{ with $related }}
+<section class="related-posts">
+    <h2>Related Articles</h2>
+    <div class="related-posts-grid">
+        {{ range . }}
+        <div class="related-post">
+            <a href="{{ .RelPermalink }}" class="related-post-link">
+                <div class="related-post-content">
+                    <h3>{{ .Title }}</h3>
+                    <div class="related-post-meta">
+                        <span class="date">{{ .Date.Format "January 2, 2006" }}</span>
+                    </div>
+                    <p class="related-post-excerpt">{{ .Summary | truncate 250 }}</p>
+                </div>
+            </a>
+        </div>
+        {{ end }}
+    </div>
+</section>
+{{ end }}

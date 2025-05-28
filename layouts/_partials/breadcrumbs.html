@@ -1,0 +1,53 @@
+{{/* layouts/_partials/breadcrumbs.html */}}
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a href="{{ .Site.BaseURL }}" itemprop="item">
+                <span itemprop="name">Home</span>
+            </a>
+            <meta itemprop="position" content="1" />
+        </li>
+        
+        {{ if .Section }}
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a href="{{ .Site.BaseURL }}{{ .Section }}/" itemprop="item">
+                <span itemprop="name">{{ humanize .Section }}</span>
+            </a>
+            <meta itemprop="position" content="2" />
+        </li>
+        {{ end }}
+        
+        {{ if and .IsPage (not .IsHome) }}
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span itemprop="name">{{ .Title }}</span>
+            <meta itemprop="position" content="{{ if .Section }}3{{ else }}2{{ end }}" />
+        </li>
+        {{ end }}
+    </ol>
+</nav>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ .Site.BaseURL }}"
+        }{{ if .Section }},
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "{{ humanize .Section }}",
+            "item": "{{ .Site.BaseURL }}{{ .Section }}/"
+        }{{ end }}{{ if and .IsPage (not .IsHome) }},
+        {
+            "@type": "ListItem",
+            "position": {{ if .Section }}3{{ else }}2{{ end }},
+            "name": "{{ .Title }}"
+        }{{ end }}
+    ]
+}
+</script>

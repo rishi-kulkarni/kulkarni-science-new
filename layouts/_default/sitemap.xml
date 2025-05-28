@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  {{ range .Data.Pages }}
+  {{ if not .Params.robotsNoIndex }}
+  <url>
+    <loc>{{ .Permalink }}</loc>
+    {{ if not .Lastmod.IsZero }}
+    <lastmod>{{ safeHTML ( .Lastmod.Format "2006-01-02T15:04:05-07:00" ) }}</lastmod>
+    {{ end }}
+    {{ with .Sitemap.ChangeFreq }}
+    <changefreq>{{ . }}</changefreq>
+    {{ end }}
+    {{ if ge .Sitemap.Priority 0.0 }}
+    <priority>{{ .Sitemap.Priority }}</priority>
+    {{ end }}
+    {{ if .IsTranslated }}
+    {{ range .Translations }}
+    <xhtml:link
+                rel="alternate"
+                hreflang="{{ .Language.Lang }}"
+                href="{{ .Permalink }}"
+                />
+    {{ end }}
+    <xhtml:link
+                rel="alternate"
+                hreflang="{{ .Language.Lang }}"
+                href="{{ .Permalink }}"
+                />
+    {{ end }}
+    {{ range $i, $e := .Resources.ByType "image" }}
+    {{ $imageUrl := $e.Permalink }}
+    <image:image>
+      <image:loc>{{ $imageUrl }}</image:loc>
+      {{ with $e.Title }}<image:title>{{ . }}</image:title>{{ end }}
+    </image:image>
+    {{ end }}
+  </url>
+  {{ end }}
+  {{ end }}
+</urlset>

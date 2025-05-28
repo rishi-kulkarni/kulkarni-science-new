@@ -50,7 +50,8 @@
   {{ with .Params.lastmod }}"dateModified": "{{ .Format "2006-01-02" }}",{{ end }}
   "url": "{{ .Permalink }}",
   "mainEntityOfPage": "{{ .Permalink }}"
-  {{ with .Params.images }},"image": "{{ index . 0 | absURL }}"{{ end }}
+  {{ if and (isset .Params "images") (.Params.images) (gt (len .Params.images) 0) }},"image": "{{ index .Params.images 0 | absURL }}"
+  {{ else if isset .Site.Params.seo "defaultImage" }},"image": "{{ .Site.Params.seo.defaultImage | absURL }}"{{ end }}
   {{ with .Params.keywords }},"keywords": {{ . | jsonify }}{{ end }}
 }
 </script>
@@ -58,6 +59,8 @@
 
 {{ define "main" }}
 <article itemscope itemtype="https://schema.org/BlogPosting">
+    {{ partial "breadcrumbs.html" . }}
+    
     <header class="single-meta">
         <h1 itemprop="headline">{{ .Title }}</h1>
         
@@ -100,11 +103,19 @@
             {{ end }}
         </nav>
         {{ end }}
+        
+        {{ if ne .Section "publications" }}
+            {{ partial "toc.html" . }}
+        {{ end }}
     </header>
     
     <div itemprop="articleBody">
         {{ .Content }}
     </div>
+    
+    {{ if and (eq .Section "blog") (ne .Kind "section") }}
+    {{ partial "social-share.html" . }}
+    {{ end }}
     
     {{ if .Params.citation }}
     <footer class="citation">
@@ -114,17 +125,5 @@
     {{ end }}
 </article>
 
-{{ $related := .Site.RegularPages.Related . | first 3 }}
-{{ if $related }}
-<aside aria-label="Related articles" class="posts">
-    <h2>Related Posts and Publications</h2>
-    {{ range $related }}
-    {{ if eq .Section "blog" }}
-        {{ partial "blog-post-item.html" . }}
-    {{ else if eq .Section "publications" }}
-        {{ partial "publication-item.html" . }}
-    {{ end }}
-    {{ end }}
-</aside>
-{{ end }}
+{{ partial "related-posts.html" . }}
 {{ end }}

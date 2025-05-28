@@ -1,0 +1,38 @@
+{{/* layouts/shortcodes/faq.html */}}
+<div class="faq-section">
+    <h2>{{ .Get "title" | default "Frequently Asked Questions" }}</h2>
+    <div class="faq-items">
+        {{ .Inner }}
+    </div>
+</div>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {{ $.Page.Scratch.Set "firstFAQ" true }}
+        {{ range $index, $faq := split .Inner "<h3>" }}
+            {{ if gt $index 0 }}
+                {{ $parts := split $faq "</h3>" }}
+                {{ $question := index $parts 0 | plainify }}
+                {{ $answer := index $parts 1 | safeHTML }}
+                
+                {{ if not ($.Page.Scratch.Get "firstFAQ") }}
+                ,
+                {{ else }}
+                {{ $.Page.Scratch.Set "firstFAQ" false }}
+                {{ end }}
+                {
+                    "@type": "Question",
+                    "name": "{{ $question }}",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": {{ $answer | plainify | jsonify }}
+                    }
+                }
+            {{ end }}
+        {{ end }}
+    ]
+}
+</script>

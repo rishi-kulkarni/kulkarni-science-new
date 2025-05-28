@@ -16,6 +16,8 @@
         "https://scholar.google.com/citations?user={{ .Site.Params.scholar }}",
         "https://orcid.org/{{ .Site.Params.orcid }}"
       ],
+      "description": "{{ .Site.Params.bio | plainify }}",
+      "image": "{{ .Site.BaseURL }}{{ .Site.Params.headshot }}",
       "affiliation": {
         "@type": "Organization",
         "name": "IntelyCare"
@@ -68,6 +70,8 @@
       "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
       {{ with .Params.lastmod }}
       "dateModified": "{{ .Format "2006-01-02T15:04:05Z07:00" }}",
+      {{ else }}
+      "dateModified": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
       {{ end }}
       "url": "{{ .Permalink }}",
       "mainEntityOfPage": "{{ .Permalink }}",
@@ -76,6 +80,14 @@
         "@type": "ImageObject",
         "url": "{{ index . 0 | absURL }}"
       },
+      {{ else }}
+      "image": {
+        "@type": "ImageObject",
+        "url": "{{ .Site.BaseURL }}{{ .Site.Params.seo.defaultImage }}"
+      },
+      {{ end }}
+      {{ with .Params.tags }}
+      "keywords": "{{ delimit . ", " }}",
       {{ end }}
       {{ with .Params.keywords }}
       "keywords": {{ . | jsonify }},

@@ -1,0 +1,7 @@
+{{/* layouts/shortcodes/faq-item.html */}}
+<div class="faq-item">
+    <h3>{{ .Get "question" }}</h3>
+    <div class="faq-answer">
+        {{ .Inner | markdownify }}
+    </div>
+</div>

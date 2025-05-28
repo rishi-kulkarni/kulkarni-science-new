@@ -1,0 +1,7 @@
+{{/* layouts/_partials/toc.html */}}
+{{ if and (gt .WordCount 400) (.Params.toc | default true) }}
+<div class="toc-container">
+    <h2>Table of Contents</h2>
+    {{ .TableOfContents }}
+</div>
+{{ end }}
