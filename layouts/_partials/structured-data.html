@@ -86,11 +86,16 @@
         "url": "{{ .Site.BaseURL }}{{ .Site.Params.seo.defaultImage }}"
       },
       {{ end }}
-      {{ with .Params.tags }}
-      "keywords": "{{ delimit . ", " }}",
+      {{ $keywords := slice }}
+      {{ if .Params.keywords }}
+        {{ $keywords = .Params.keywords }}
       {{ end }}
-      {{ with .Params.keywords }}
-      "keywords": {{ . | jsonify }},
+      {{ if .Params.tags }}
+        {{ $keywords = $keywords | append .Params.tags }}
+      {{ end }}
+      {{ if $keywords }}
+        {{ $uniqueKeywords := $keywords | uniq }}
+        "keywords": {{ $uniqueKeywords | jsonify }},
       {{ end }}
       "articleSection": "{{ .Section | title }}",
       "wordCount": {{ .WordCount }}
