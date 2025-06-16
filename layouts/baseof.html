@@ -20,12 +20,22 @@
     <meta name="description" content="{{ $description }}">
     {{ end }}
 
+    {{ $keywords := slice }}
     {{ if .Params.keywords }}
-    <meta name="keywords" content="{{ delimit .Params.keywords ", " }}">
-    {{ else if .Keywords }}
-    <meta name="keywords" content="{{ delimit .Keywords "," }}">
-    {{ else if .Site.Params.seo.siteKeywords }}
-    <meta name="keywords" content="{{ .Site.Params.seo.siteKeywords }}">
+      {{ $keywords = .Params.keywords }}
+    {{ end }}
+    {{ if .Params.tags }}
+      {{ $keywords = $keywords | append .Params.tags }}
+    {{ end }}
+    {{ if and (not $keywords) .Keywords }}
+      {{ $keywords = .Keywords }}
+    {{ end }}
+    {{ if and (not $keywords) .Site.Params.seo.siteKeywords }}
+      {{ $keywords = split .Site.Params.seo.siteKeywords ", " }}
+    {{ end }}
+    {{ if $keywords }}
+      {{ $uniqueKeywords := $keywords | uniq }}
+    <meta name="keywords" content="{{ delimit $uniqueKeywords ", " }}">
     {{ end }}
     
     <!-- OpenGraph meta tags for social sharing -->
