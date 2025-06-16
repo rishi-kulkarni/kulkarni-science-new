@@ -17,7 +17,7 @@
         "https://orcid.org/{{ .Site.Params.orcid }}"
       ],
       "description": "{{ .Site.Params.bio | plainify }}",
-      "image": "{{ .Site.BaseURL }}{{ .Site.Params.headshot }}",
+      "image": "{{ .Site.Params.headshot | absURL }}",
       "affiliation": {
         "@type": "Organization",
         "name": "IntelyCare"
@@ -117,7 +117,7 @@
       {{ end }}
       {{ if $keywords }}
         {{ $uniqueKeywords := $keywords | uniq }}
-        "keywords": {{ $uniqueKeywords | jsonify }},
+        "keywords": [{{ range $i, $keyword := $uniqueKeywords }}{{ if $i }},{{ end }}"{{ $keyword }}"{{ end }}],
       {{ end }}
       "articleSection": "{{ .Section | title }}",
       "wordCount": {{ .WordCount }}
