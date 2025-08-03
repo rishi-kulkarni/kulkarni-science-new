@@ -6,7 +6,7 @@ authors: ["Rishi Kulkarni"]
 description: "A practical guide to building churn models using Empirical Bayes methods that simultaneously improve individual user estimates and control for multiple comparisons."
 abstract: "Traditional churn models often overthink the problem. This post presents a simple Empirical Bayes approach that estimates user-specific activity rates, naturally handles multiple comparisons through shrinkage, and directly answers the business question: who needs intervention now?"
 tags: ["statistical-methods", "data-analysis", "python", "hypothesis-testing", "bayesian-statistics"]
-keywords: ["Empirical Bayes", "churn prediction", "customer retention", "shrinkage estimation", "multiple comparisons", "Poisson process", "James-Stein estimator", "lifecycle marketing", "user engagement", "statistical modeling", "Python implementation", "business analytics"]
+keywords: ["Empirical Bayes", "churn prediction", "customer retention", "shrinkage estimation", "multiple comparisons", "Poisson process", "James-Stein estimator", "lifecycle marketing", "user engagement", "statistical modeling", "Python implementation", "business analytics", "retention analysis", "customer analytics", "Bayesian shrinkage"]
 summary: "Traditional churn models often overthink the problem. This post presents a simple Empirical Bayes approach that estimates user-specific activity rates, naturally handles multiple comparisons through shrinkage, and directly answers the business question: who needs intervention now?"
 math: true
 toc: true
