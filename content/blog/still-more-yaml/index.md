@@ -1,7 +1,7 @@
 ---
 title: "Still More YAML"
-date: 2025-12-27T00:00:00Z
-lastmod: 2025-12-27T00:00:00Z
+date: 2025-12-26T00:00:00Z
+lastmod: 2025-12-26T00:00:00Z
 authors: ["Rishi Kulkarni"]
 description: "Why software engineers spend 40% of their time on infrastructure instead of building things—and why the system makes this rational."
 abstract: "Why do we spend so much time on meta-work in software engineering?"
