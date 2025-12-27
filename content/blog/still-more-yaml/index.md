@@ -106,7 +106,7 @@ Organizations value legibility over quality when the two conflict. This isn't un
 
 Legible mediocre work beats illegible good work, because the former can be planned around, budgeted for, and sold to the board. The latter cannot.
 
-Engineer fungibility is downstream of this. The dream of interchangeable engineers—lose someone Friday, backfill them Monday, skills as Lego bricks—exists because it makes engineering legible to the organization. "We need three engineers with Kubernetes experience" is a sentence a VP can put in a budget proposal. "We need someone with good judgment that we'll identify over time through close observation" is not.
+Engineer fungibility is downstream of this. The dream of interchangeable engineers—lose someone Friday, backfill them Monday, skills as Lego bricks—exists because it makes engineering legible to the organization. "We need three engineers with Kubernetes experience" is a sentence a VP can put in a budget proposal. "We'll ship by Q3 with this team composition" is a promise that can go on a roadmap. "We'll ship by Q3 if we find someone who really gets it" is not.
 
 And yet: when something breaks badly enough, the org chart dissolves. Someone says "get me the person who actually understands this thing." The illegible expertise no one would plan around—because planning around it meant depending on someone who couldn't be replaced—is suddenly the only thing that matters.
 
