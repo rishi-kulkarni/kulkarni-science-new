@@ -12,9 +12,9 @@ toc: true
 
 I run [bowl.science](https://bowl.science), an online Science Bowl tournament platform. It's a side project, but it's real production: the DOE Office of Science uses it for their Science Bowl competitions. When a tournament is happening, the app needs to work. There's no "we'll fix it in the next sprint."
 
-The app itself is straightforward: a Go server with SQLite, real-time buzzer system via Server-Sent Events, and automatic TLS via Let's Encrypt. A single Debian 13 (Trixie) VPS runs the whole thing. The database is replicated to S3 using [Litestream](https://litestream.io/) for durability and disaster recovery. The VPS is ample for the load a tournament generates, and there's plenty of headroom for vertical scaling if needed.
+It's a Go server with SQLite, a real-time buzzer system via Server-Sent Events, and automatic TLS via Let's Encrypt—a single Debian 13 (Trixie) VPS runs the whole thing. The database is replicated to S3 using [Litestream](https://litestream.io/) for disaster recovery, and the VPS handles tournament load fine.
 
-The challenge is maintaining it. This is a side project, which means I might not touch the code for months at a time. But I get feature requests from the Science Bowl steering committee once a season or so. Then I need to make a change, deploy it, and not break production. I shouldn't have to remember what I did last time. One command should deploy everything, no half-finished states. And if something breaks, I should be able to come back after six months and understand how the deployment works without re-learning a bespoke system.
+The challenge is maintaining it. This is a side project, which means I might not touch the code for months at a time, but I get feature requests from the Science Bowl steering committee once a season or so. When that happens, I need to make a change, deploy it, and not break production—without having to remember what I did last time. One command should deploy everything, no half-finished states. And if something breaks, I should be able to come back after six months and understand how the deployment works without re-learning a bespoke system.
 
 For a while, I ran the app (server and Litestream) as bare binaries with systemd units I'd written directly on the server. It worked, but "how do you run this thing?" lived only in production. Every deploy was SSH, copy the new binary, restart the service. Making changes to the service configuration meant editing files on the server and hoping I remembered what I changed.
 
@@ -28,23 +28,23 @@ Oh, and ports. The app needs 80 and 443, but I don't want to run as root or put 
 
 ## Why Not Docker or s6?
 
-I assumed the landscape had changed since the last time I ran a server binary on a VM. Containers are everywhere now. There had to be a clean way to get version-controlled config, single artifacts, and service coordination without adopting a fleet orchestrator.
+I assumed the landscape had changed since the last time I ran a server binary on a VM; containers are everywhere now. There had to be a clean way to get version-controlled config, single artifacts, and service coordination without adopting a fleet orchestrator.
 
 At work, I'd reach for ECS. It checks every box: task definitions live in source control (via Terraform or CDK), you deploy container images as single artifacts, updates are atomic, and you can wire up service dependencies. ECS is good software.
 
 But ECS abstracts over where your code runs. You don't know which EC2 instance your container lands on, or when it might migrate to a different one. That's the right model when you're scaling horizontally—you *want* the orchestrator to place containers wherever there's capacity.
 
-I'm already managing the underlying VM. I picked the VPS, I SSH into it, I know it's the same machine every time. I don't need an abstraction that hides the server from me; the server is the whole point.
+I'm already managing the underlying VM: I picked the VPS, I SSH into it, I know it's the same machine every time. I don't need an abstraction that hides the server from me; the server is the whole point.
 
-This mismatch shows up everywhere. You need an artifact registry, because the orchestrator pulls images rather than you pushing them. Pull-based GitOps makes sense when any node in a fleet might need your image at any time. For a single server, it means uploading to ECR, waiting for propagation, then downloading it again to the same place you could have just `scp`'d it directly.
+This ends up imposing a ton of constraints. You need an artifact registry, because the orchestrator pulls images rather than you pushing them. Pull-based GitOps makes sense when any node in a fleet might need your image at any time, but for a single server, it means uploading to ECR, waiting for propagation, then downloading it again to the same place you could have just `scp`'d it directly.
 
-Deploys are slow. ECS pulls your image, starts the container, runs health checks, waits for the deregistration delay (default: 5 minutes), drains connections from the old task, updates the target group. This is correct behavior for zero-downtime rolling deployments across a fleet. When "deploy" means "restart one process on one server," it's ceremony around a `systemctl restart`.
+Deploys are slow. ECS pulls your image, starts the container, runs health checks, waits for the deregistration delay (default: 5 minutes), drains connections from the old task, updates the target group. That's all the right behavior for a fleet, but when "deploy" means "restart one process on one server," it's ceremony around a `systemctl restart`.
 
 **Docker Compose** is the obvious starting point. Define your services in a `docker-compose.yml`, check it into git, `scp` it to the server, run `docker-compose up`. Version-controlled config, service dependencies, single command to deploy. But what is Docker Compose, really? It's a process manager. It starts your services, restarts them when they crash, manages their dependencies, coordinates their lifecycle. You know what else does that? The init system that's already running on the VM. And the container part—what's it buying me? Go already produces single-file statically-linked executables. The whole point of OCI images is packaging your app with its dependencies into a portable artifact. I don't have dependencies. I have a binary. Wrapping it in a container so I can use a process manager so I can run it on a system that already has a process manager feels like a lot of abstraction to end up back at "run this binary."
 
-**s6-overlay** takes the opposite approach: bundle everything into one container with a lightweight supervisor inside. One image, one artifact, multiple processes. But now every deploy restarts everything. In practice, I update the app constantly and Litestream almost never. Restarting Litestream forces a full database snapshot—I don't want that every time I fix a typo in a template.
+**s6-overlay** takes the opposite approach: bundle everything into one container with a lightweight supervisor inside. One image, one artifact, multiple processes. But now every deploy restarts everything, and in practice, I update the app constantly and Litestream almost never. Restarting Litestream forces a full database snapshot—I don't want that every time I fix a typo in a template.
 
-**Multiple systemd units** is what I was already doing—just formalize it. Write the unit files locally, check them into git, copy them to the server as part of the deploy. This gets version control, but it's not a single artifact. I'm copying unit files, reloading the daemon, deploying the binaries separately. There's no atomic "here's the new version of everything." The pieces can get out of sync. This is, in fact, what I had been doing—and I'd ended up writing about 600 lines of Python to orchestrate it all properly. That felt very silly.
+**Multiple systemd units** is what I was already doing—just formalize it. Write the unit files locally, check them into git, copy them to the server as part of the deploy. This gets version control, but it's not a single artifact; I'm copying unit files, reloading the daemon, deploying the binaries separately, and there's no atomic "here's the new version of everything." The pieces can get out of sync. This is, in fact, what I had been doing—and I'd ended up writing about 600 lines of Python to orchestrate it all properly. That felt very silly.
 
 I was poking around Lennart Poettering's blog when I found a post about portable services. It sounded like exactly what I wanted: systemd's process management, but with a single deployable image.
 
@@ -52,7 +52,7 @@ I was poking around Lennart Poettering's blog when I found a post about portable
 
 A portable service image is, essentially, an extremely minimal OS image. It has the standard Linux filesystem layout—`/usr/bin` for binaries, `/usr/lib/systemd/system` for unit files, `/etc` for configuration—but contains only what your application needs.
 
-The key is that systemd can *dissect* this image. When you run `portablectl attach`, systemd mounts the image, looks inside, finds the unit files, and installs them as native systemd services. There's no abstraction layer, no daemon managing the container lifecycle, no translation between "what the container wants" and "what the host provides." The services in the image become regular systemd services, managed with `systemctl` like anything else.
+systemd can *dissect* this image. When you run `portablectl attach`, it mounts the image, looks inside, finds the unit files, and installs them as native systemd services. There's no abstraction layer, no daemon managing the container lifecycle, no translation between "what the container wants" and "what the host provides." The services in the image become regular systemd services, managed with `systemctl` like anything else.
 
 Inside the image:
 
@@ -94,9 +94,9 @@ The [systemd portable services documentation](https://systemd.io/PORTABLE_SERVIC
 mksquashfs bin/bowlscience bin/bowlscience.raw -noappend -all-root -comp xz
 ```
 
-The result is an 18 MB image. For updates, `portablectl reattach` atomically swaps to the new version—the old image is unmounted and the new one takes its place.
+The result is an 18 MB image. Given that it's two Go binaries xz-compressed, that's about as small as it gets. For updates, `portablectl reattach` atomically swaps to the new version—the old image is unmounted and the new one takes its place.
 
-This gets me most of what I wanted. The service unit files live in `deployment/portable/usr/lib/systemd/system/` in my git repo—changes to how the app runs are code changes, reviewed and committed like anything else. Both binaries are in the same image, but they're still independent systemd services. One `make deploy` uploads one file. The `reattach` command swaps the entire image atomically, but I can choose which services to restart—update the app without bouncing Litestream.
+This gets me most of what I wanted. The service unit files live in `deployment/portable/usr/lib/systemd/system/` in my git repo—changes to how the app runs are code changes, reviewed and committed like anything else. Both binaries are in the same image, but they're still independent systemd services. One `make deploy` uploads one file, and the `reattach` command swaps the entire image atomically—but I can choose which services to restart, so I can update the app without bouncing Litestream.
 
 It also solved a problem I didn't have a good answer for: downtime during restarts. Go binaries boot fast—a few hundred milliseconds—but that's still a window where requests get connection refused. With containers, you either accept the blip or put a load balancer in front. For a single-server side project, neither felt right.
 
@@ -106,7 +106,7 @@ systemd can bind the listening socket before your application starts, then pass 
 
 This is something container runtimes can't easily provide. The container owns its network namespace; you can't hand it a socket that was bound outside. With portable services, the app runs directly under systemd, so socket activation just works.
 
-It also solves the privileged port problem. The app serves HTTPS on port 443, which normally requires root. With socket activation, systemd binds the port (as root, during early boot) and hands it off. The app runs unprivileged.
+It also solves the privileged port problem. The app serves HTTPS on port 443, which normally requires root. With socket activation, systemd binds the port (as root, during early boot) and hands it off, so the app can run unprivileged.
 
 The socket unit:
 
@@ -137,7 +137,7 @@ I added a few more things while I was in there: `DynamicUser=yes` allocates a UI
 
 I `scp` the new image to the server and run `portablectl reattach` to swap it in. Then I restart just the app service—Litestream keeps running. No unnecessary database snapshot just because I fixed a typo. I wrapped this in a `make deploy` target; there's a `--restart-all` flag for when I actually update Litestream.
 
-Server setup was cloud-init creating a deploy user with SSH access and sudo for `portablectl`. The minimal setup also meant I could match it locally. My dev environment is a Lima VM running the same OS and systemd version as production. I test the full deploy—not just the app—before pushing.
+Server setup was cloud-init creating a deploy user with SSH access and sudo for `portablectl`. The minimal setup also meant I could match it locally—my dev environment is a Lima VM running the same OS and systemd version as production, so I test the full deploy, not just the app, before pushing.
 
 Secrets go in override files:
 
