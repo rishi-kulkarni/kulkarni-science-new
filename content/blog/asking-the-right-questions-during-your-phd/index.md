@@ -11,7 +11,6 @@ images: ["/images/phd-research-planning.jpg"]
 links:
   - text: "Read the full piece at New Science"
     url: "https://newscience.org/asking-the-right-questions/"
-summary: A guide to planning scientific projects and asking the right research questions during your PhD, based on insights from my piece for New Science on strategic research planning. Check out the [full article here](https://newscience.org/asking-the-right-questions/).
 ---
 
 A while back, I wrote a short piece about planning scientific projects for New Science. The article explores systematic approaches to identifying impactful research questions and structuring PhD projects for maximum scientific contribution.

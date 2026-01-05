@@ -12,7 +12,7 @@
                     <div class="related-post-meta">
                         <span class="date">{{ .Date.Format "January 2, 2006" }}</span>
                     </div>
-                    <p class="related-post-excerpt">{{ .Summary | truncate 250 }}</p>
+                    <p class="related-post-excerpt">{{ .Params.abstract | truncate 250 }}</p>
                 </div>
             </a>
         </div>
