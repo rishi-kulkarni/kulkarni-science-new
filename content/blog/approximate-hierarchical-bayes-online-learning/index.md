@@ -353,6 +353,8 @@ In practice, this approach has served me well. The approximations compose cleanl
 
 When you know your domain, substituting that knowledge for data-driven learning is often a good trade. The approximations aren't defects—they're where your expertise enters the model.
 
+If you want to try this approach, my team uses [bayesianbandits](https://github.com/bayesianbandits/bayesianbandits) in production.
+
 [^1]: Kleinberg, R., Slivkins, A., & Upfal, E. (2019). Bandits and experts in metric spaces. *Journal of the ACM*, 66(4), 1-77. (Earlier conference version: STOC 2008)
 
 [^2]: Thompson, W. R. (1933). On the likelihood that one unknown probability exceeds another in view of the evidence of two samples. *Biometrika*, 25(3/4), 285-294.

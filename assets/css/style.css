@@ -65,7 +65,7 @@ p {
 
 a {
     color: var(--primary);
-    text-decoration: none;
+    text-decoration: underline;
     transition: color 0.2s;
 }
 
