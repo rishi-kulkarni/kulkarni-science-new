@@ -27,6 +27,11 @@ siteKeywords = "statistics, hierarchical modeling, computational biology, machin
 [markup.goldmark]
 [markup.goldmark.renderer]
 unsafe = true # Allow raw HTML in markdown
+[markup.goldmark.extensions.passthrough]
+enable = true
+[markup.goldmark.extensions.passthrough.delimiters]
+block = [['$$', '$$'], ['\[', '\]']]
+inline = [['$', '$'], ['\(', '\)']]
 [markup.highlight]
 style = "github"
 lineNos = true
