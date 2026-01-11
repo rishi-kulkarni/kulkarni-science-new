@@ -20,7 +20,6 @@ hierarchical modeling, and computational approaches to biomedical data analysis.
 
 # SEO Parameters
 [params.seo]
-defaultImage = "/images/headshot.png"
 siteKeywords = "statistics, hierarchical modeling, computational biology, machine learning, experimental design, data science"
 
 [markup]
