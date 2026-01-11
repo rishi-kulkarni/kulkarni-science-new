@@ -8,32 +8,45 @@
         </div>
         {{ end }}
     </header>
-    
+
     {{ $paginator := .Paginator }}
-    
+
     {{ if eq .Section "projects" }}
     <div class="projects">
         {{ range $paginator.Pages }}
         {{ partial "project-card.html" . }}
         {{ end }}
     </div>
-    
+
     {{ else if eq .Section "publications" }}
     <div class="publications">
         {{ range $paginator.Pages }}
         {{ partial "publication-item.html" . }}
         {{ end }}
     </div>
-    
+
     {{ else }}
-    <!-- Default blog/article layout -->
-    <div class="posts">
-        {{ range $paginator.Pages }}
-        {{ partial "blog-post-item.html" . }}
-        {{ end }}
+    <!-- Blog layout with sidebar -->
+    <div class="blog-layout">
+        <div class="posts">
+            {{ range $paginator.Pages }}
+            {{ partial "blog-post-item.html" . }}
+            {{ end }}
+        </div>
+        <aside class="blog-sidebar">
+            <div class="tag-list">
+                <h3>Tags</h3>
+                <ul>
+                {{ range first 10 .Site.Taxonomies.tags.ByCount }}
+                    <li><a href="{{ "/tags/" | relURL }}{{ .Name | urlize }}">{{ .Name }}</a> <span class="count">{{ .Count }}</span></li>
+                {{ end }}
+                </ul>
+                <a href="{{ "/tags/" | relURL }}" class="all-tags">All tags →</a>
+            </div>
+        </aside>
     </div>
     {{ end }}
-    
+
     {{ template "_internal/pagination.html" . }}
 </div>
 {{ end }}

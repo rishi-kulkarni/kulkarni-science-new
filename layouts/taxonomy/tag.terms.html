@@ -4,10 +4,10 @@
         <h1>All Tags</h1>
         <p>Browse content by topic</p>
     </header>
-    
-    <div class="single-meta">
+
+    <div class="all-tags-grid">
         {{ range .Data.Terms.Alphabetical }}
-        <a href="{{ .Page.RelPermalink }}" class="tag">
+        <a href="{{ .Page.RelPermalink }}" class="tag-item">
             <span class="tag-name">{{ .Page.Title }}</span>
             <span class="tag-count">{{ .Count }}</span>
         </a>

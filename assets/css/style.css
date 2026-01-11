@@ -287,7 +287,7 @@ main {
 
 /* Section styling */
 section {
-    margin: 3rem 0;
+    margin: 0rem 0;
 }
 
 section h2 {
@@ -404,6 +404,89 @@ section h2::after {
     background: var(--primary);
     color: var(--text-white);
     text-decoration: none;
+}
+
+/* Blog layout with sidebar */
+.blog-layout {
+    display: grid;
+    grid-template-columns: 1fr 250px;
+    gap: 2rem;
+    align-items: start;
+}
+
+.blog-sidebar {
+    position: sticky;
+    top: 2rem;
+}
+
+.tag-list {
+    background: var(--bg-primary);
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+    margin-top: 1rem;
+}
+
+.tag-list h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.tag-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tag-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.tag-list li:last-child {
+    border-bottom: none;
+}
+
+.tag-list li a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.tag-list li a:hover {
+    color: var(--tertiary);
+}
+
+.tag-list .count {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.tag-list .all-tags {
+    display: block;
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--tertiary);
+    text-decoration: none;
+}
+
+.tag-list .all-tags:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .blog-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .blog-sidebar {
+        position: static;
+        order: -1;
+    }
 }
 
 /* Unified article styling for publications and posts */
@@ -730,17 +813,41 @@ figcaption {
     text-decoration: none;
 }
 
-.tag-name {
+/* All tags page */
+.all-tags-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.all-tags-grid .tag-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-primary);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.all-tags-grid .tag-item:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.all-tags-grid .tag-name {
     color: var(--text-primary);
     font-weight: 500;
 }
 
-.tag-count {
+.all-tags-grid .tag-count {
     background: var(--accent);
     color: var(--text-white);
-    padding: 0.2rem 0.5rem;
+    padding: 0.15rem 0.5rem;
     border-radius: 12px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
 }
 

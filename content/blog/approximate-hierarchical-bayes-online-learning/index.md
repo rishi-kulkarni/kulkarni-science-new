@@ -5,7 +5,8 @@ lastmod: 2026-01-10T00:00:00Z
 authors: ["Rishi Kulkarni"]
 description: "A practical guide to building scalable Thompson sampling systems using Random Fourier Features and hierarchical priors for contextual bandits."
 abstract: "Full Gaussian Process models are ideal for continuous-armed bandits but don't scale. This post walks through a series of principled approximations—Random Fourier Features, conjugate linear regression, hierarchical feature encoding, and Kalman-style forgetting—that preserve uncertainty quantification for Thompson sampling while enabling real-time decisions at scale."
-tags: ["statistical-methods", "bayesian-statistics", "machine-learning", "decision-theory"]
+summary: "Suppose you're choosing a continuous value x and observing a noisy reward y. The reward depends on x through some unknown function f(x), and you're making decisions repeatedly—learning as you go. This post explores how to build scalable Bayesian models for this problem using principled approximations."
+tags: ["statistical methods", "bayesian statistics", "machine learning", "decision theory"]
 keywords: ["Thompson sampling", "Gaussian processes", "Random Fourier Features", "contextual bandits", "hierarchical Bayes", "Kalman filter", "online learning", "exploration-exploitation", "partial pooling", "Bayesian linear regression", "multi-armed bandits", "pricing optimization", "decision making under uncertainty"]
 math: true
 toc: true

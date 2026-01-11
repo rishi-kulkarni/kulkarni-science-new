@@ -5,7 +5,7 @@ lastmod: 2025-12-31T00:00:00Z
 authors: ["Rishi Kulkarni"]
 description: "How systemd portable services provide version-controlled deployment, atomic updates, and socket activation for a side project—without containers or orchestrators."
 abstract: "Running a side project in production means coming back after months and needing deploys to just work. This post explores how systemd portable services solve version-controlled config, single-artifact deployment, and zero-downtime restarts for bowl.science—without the ceremony of containers or fleet orchestrators."
-tags: ["systemd", "linux", "self-hosting", "devops", "side-projects"]
+tags: ["systemd", "linux", "self hosting", "devops", "side projects"]
 keywords: ["systemd portable services", "socket activation", "deployment", "Linux", "VPS", "side project", "Go", "SQLite", "Litestream", "Docker alternative", "container alternative", "atomic deployment", "zero-downtime restart", "portablectl", "systemd unit files"]
 toc: true
 ---

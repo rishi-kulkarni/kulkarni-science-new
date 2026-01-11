@@ -26,29 +26,8 @@
 {{ end }}
 
 {{ define "main" }}
-<!-- Research Areas -->
-<section>
-    <h2>Research Areas</h2>
-    <p>My work spans theoretical development and practical applications in statistical learning</p>
-    
-    <div class="research-areas">
-        <div class="research-area">
-            <h3>Bayes in Production</h3>
-            <p>Multi-armed bandits, hierarchical models, and uncertainty quantification in production ML systems</p>
-        </div>
-        <div class="research-area">
-            <h3>Estimation</h3>
-            <p>Experimental design, resampling methods, and statistical software for nested data structures</p>
-        </div>
-        <div class="research-area">
-            <h3>Computational Biology</h3>
-            <p>Biostatistics, neuroscience applications, and bioinformatics tools for biological data analysis</p>
-        </div>
-    </div>
-</section>
-
 <!-- Recent Blog Posts -->
-{{ $posts := first 3 (where .Site.RegularPages "Section" "blog") }}
+{{ $posts := first 5 (where .Site.RegularPages "Section" "blog") }}
 {{ if $posts }}
 <section class="posts">
     <h2>Recent Articles</h2>

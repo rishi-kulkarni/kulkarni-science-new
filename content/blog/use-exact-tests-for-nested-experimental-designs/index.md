@@ -8,7 +8,7 @@ lastmod: 2025-05-24T00:00:00Z
 authors: ["Rishi Kulkarni"]
 description: "Learn how to properly analyze nested experimental designs like neurons-within-coverslips using hierarchical resampling methods. Includes Python implementation and statistical comparisons with traditional approaches."
 abstract: "Traditional statistical approaches to nested experimental designs in neuroscience violate fundamental assumptions, leading to inflated Type I error rates and reproducibility issues. Hierarchical resampling offers a principled solution that maintains statistical rigor while utilizing all available information from hierarchical data structures."
-tags: ["neuroscience-statistics", "experimental-design", "statistical-methods", "type-i-error", "resampling", "python", "biomedical-research", "data-analysis", "reproducibility", "hypothesis-testing"]
+tags: ["neuroscience statistics", "experimental design", "statistical methods", "type I error", "resampling", "python", "biomedical research", "data analysis", "reproducibility", "hypothesis testing"]
 keywords: ["neuroscience statistics", "nested experimental design", "hierarchical resampling", "Type I error control", "bootstrap permutation", "coverslip neuron analysis", "biomedical statistics", "experimental design flaws", "statistical significance testing", "Python data science", "research reproducibility", "nested data analysis", "permutation testing", "bootstrap methods",]
 images: ["/images/neuroscience-statistics-hierarchical-resampling.jpg"]
 categories: ["Data Science", "Neuroscience", "Statistical Methods"]
