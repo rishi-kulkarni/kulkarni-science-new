@@ -1085,3 +1085,8 @@ figcaption {
     color: var(--text-white);
     background-color: var(--secondary);
 }
+
+/* Fix anchor scroll position for sticky header */
+:target {
+    scroll-margin-top: 80px;
+}
