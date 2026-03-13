@@ -1,6 +1,6 @@
 ---
 title: "Running Multiple Services in a Docker Container with OpenRC"
-subtitle: "Or: serverful containers and the case for using an init system you already know"
+subtitle: "Or: serverful containers"
 date: 2026-03-07T00:00:00Z
 lastmod: 2026-03-07T00:00:00Z
 authors: ["Rishi Kulkarni"]
