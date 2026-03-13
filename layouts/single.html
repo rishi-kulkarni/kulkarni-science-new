@@ -12,7 +12,8 @@
     
     <header class="single-meta">
         <h1 itemprop="headline">{{ .Title }}</h1>
-        
+        {{ with .Params.subtitle }}<p class="subtitle">{{ . }}</p>{{ end }}
+
         {{ if .Params.authors }}
         <div class="meta authors">
             {{ range $i, $author := .Params.authors }}
