@@ -1,12 +1,13 @@
 ---
-title: "Serverful Containers"
+title: "Running Multiple Services in a Docker Container with OpenRC"
+subtitle: "Or: serverful containers"
 date: 2026-03-07T00:00:00Z
 lastmod: 2026-03-07T00:00:00Z
 authors: ["Rishi Kulkarni"]
-description: "Running multiple services inside a single Docker container using Alpine's OpenRC init system instead of s6-overlay."
+description: "How to use Alpine's built-in OpenRC as a process supervisor inside Docker containers — with service dependencies, health checks, and logging — instead of supervisord or s6-overlay."
 abstract: "A case for using OpenRC as a process supervisor inside Docker containers – leveraging familiar init system conventions instead of learning a container-specific tool like s6-overlay. Includes a working proof of concept with FastAPI, a background worker, and nginx."
-tags: ["containers", "docker", "openrc", "alpine", "self-hosting"]
-keywords: ["openrc docker", "multi-process container", "s6-overlay alternative", "alpine init system", "serverful containers"]
+tags: ["containers", "docker", "openrc", "alpine", "supervisord", "process-supervisor", "s6-overlay"]
+keywords: ["docker multiple services", "openrc docker", "s6-overlay alternative", "supervisord alternative", "alpine docker init system", "docker process supervisor"]
 toc: false
 ---
 
