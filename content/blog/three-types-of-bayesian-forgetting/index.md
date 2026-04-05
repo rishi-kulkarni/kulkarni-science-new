@@ -136,6 +136,6 @@ The remaining question is whether you also need a stabilized floor. Directional 
 
 [^2]: Cao, L. & Schwartz, H. M. (2000). "A directional forgetting algorithm based on the decomposition of the information matrix." *Automatica*, 36(11), 1725-1731.
 
-[^3]: Lai, L. & Bernstein, D. S. (2024). "Recursive Least Squares with Selective Forgetting via the Bartlett Decomposition of the Information Matrix." *Proceedings of the 63rd IEEE Conference on Decision and Control (CDC)*.
+[^3]: Lai, B. & Bernstein, D. S. (2024). "SIFt-RLS: Subspace of Information Forgetting Recursive Least Squares." arXiv:2404.10844. https://arxiv.org/abs/2404.10844
 
 [^4]: Gelman, A. (2021). "The Bayesian Cringe." *Statistical Modeling, Causal Inference, and Social Science* (blog). https://statmodeling.stat.columbia.edu/2021/09/15/the-bayesian-cringe/
