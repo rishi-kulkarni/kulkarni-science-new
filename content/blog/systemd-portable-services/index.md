@@ -64,6 +64,7 @@ Inside the image:
 │   ├── lib/
 │   │   ├── os-release                # Identifies this as a portable service
 │   │   └── systemd/system/
+│   │       ├── bowlscience.target
 │   │       ├── bowlscience.service
 │   │       ├── bowlscience-http.socket
 │   │       ├── bowlscience-https.socket
@@ -114,7 +115,7 @@ The socket unit:
 # bowlscience-http.socket
 [Unit]
 Description=bowl.science HTTP Socket (port 80)
-PartOf=bowlscience.service
+PartOf=bowlscience.target
 
 [Socket]
 ListenStream=80
@@ -124,6 +125,21 @@ Service=bowlscience.service
 [Install]
 WantedBy=sockets.target
 ```
+
+The socket points at a target, not at the service. The target is a small grouping unit that owns the app as a whole:
+
+```ini
+# bowlscience.target
+[Unit]
+Description=bowl.science (sockets, server, Litestream)
+Wants=bowlscience-http.socket bowlscience-https.socket
+Wants=bowlscience.service bowlscience-litestream-replicate.service
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Every unit declares `PartOf=bowlscience.target`. `PartOf=` propagates stop and restart, and it's one-way: "changes to this unit do not affect the listed units." Restarting the server leaves the sockets alone and the queued connections intact, while `systemctl stop bowlscience.target` takes listeners and processes down together.
 
 On the Go side, the `github.com/coreos/go-systemd/v22/activation` package retrieves the passed file descriptors. The server checks for activated listeners at startup; if none (local dev), it falls back to binding ports directly.
 
