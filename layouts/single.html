@@ -7,11 +7,11 @@
 {{ end }}
 
 {{ define "main" }}
-<article itemscope itemtype="https://schema.org/BlogPosting">
+<article{{ with .Params.cssclass }} class="{{ . }}"{{ end }} itemscope itemtype="https://schema.org/BlogPosting">
     {{ partial "breadcrumbs.html" . }}
     
     <header class="single-meta">
-        <h1 itemprop="headline">{{ .Title }}</h1>
+        {{ if not .Params.hidetitle }}<h1 itemprop="headline">{{ .Title }}</h1>{{ end }}
         {{ with .Params.subtitle }}<p class="subtitle">{{ . }}</p>{{ end }}
 
         {{ if .Params.authors }}

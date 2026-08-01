@@ -85,7 +85,7 @@
     {{ partial "accessibility.html" . }}
     <header class="site-header">
         <div class="container">
-            <h1><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+            <p class="site-title"><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></p>
             <nav aria-label="Main navigation">
                 <ul>
                     {{ range .Site.Menus.main }}
