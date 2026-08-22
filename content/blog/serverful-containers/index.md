@@ -2,9 +2,9 @@
 title: "Running Multiple Services in a Docker Container with OpenRC"
 subtitle: "Or: serverful containers"
 date: 2026-03-07T00:00:00Z
-lastmod: 2026-03-07T00:00:00Z
+lastmod: 2026-08-21T00:00:00Z
 authors: ["Rishi Kulkarni"]
-description: "How to use Alpine's built-in OpenRC as a process supervisor inside Docker containers — with service dependencies, health checks, and logging — instead of supervisord or s6-overlay."
+description: "How to use Alpine's built-in OpenRC as a process supervisor inside Docker containers — with service dependencies, health checks, and syslog logging — instead of supervisord or s6-overlay."
 abstract: "A case for using OpenRC as a process supervisor inside Docker containers – leveraging familiar init system conventions instead of learning a container-specific tool like s6-overlay. Includes a working proof of concept with FastAPI, a background worker, and nginx."
 tags: ["containers", "docker", "openrc", "alpine", "supervisord", "process-supervisor", "s6-overlay"]
 keywords: ["docker multiple services", "openrc docker", "s6-overlay alternative", "supervisord alternative", "alpine docker init system", "docker process supervisor"]
@@ -48,8 +48,8 @@ healthcheck() {
     wget -q --spider http://127.0.0.1:8000/health
 }
 
-output_logger="/usr/local/bin/log-prefix webapp"
-error_logger="/usr/local/bin/log-prefix webapp"
+output_logger="logger -t webapp -p daemon.info"
+error_logger="logger -t webapp -p daemon.notice"
 ```
 
 `supervisor="supervise-daemon"` tells OpenRC to keep the process alive – crash, restart, with configurable respawn limits. But the thing I keep coming back to is that this is a standard OpenRC init script. Copy it to a bare-metal Alpine server and it just works. Same file, same commands, same mental model. The container is just the packaging. Inside, it's a normal server.
@@ -142,19 +142,29 @@ OpenRC writes state files to `/run`. Without the `tmpfs`, you get stale state fr
 
 `supervise-daemon` has `--stdout-logger` and `--stderr-logger`[1]. Point them at a program, and it pipes service output through it. In OpenRC init scripts, these are set via the `output_logger` and `error_logger` variables.
 
-The log prefix script is five lines:
+My first version was a five-line shell script that read stdin and wrote `[webapp] ...` to `/proc/1/fd/1`, PID 1's stdout. It felt like a bit of a hack, and a coworker pointed out I could just use syslog. The program that tags a line and hands it off already exists: `logger`. So each service now has
 
 ```sh
-#!/bin/sh
-prefix="$1"
-while IFS= read -r line; do
-    printf '[%s] %s\n' "$prefix" "$line"
-done >> /proc/1/fd/1
+output_logger="logger -t webapp -p daemon.info"
+error_logger="logger -t webapp -p daemon.notice"
 ```
 
-Each service gets a tag (`[webapp]`, `[worker]`, `[nginx]`) and everything writes to `/proc/1/fd/1`, which is PID 1's stdout. That gets you per-service prefixes in `docker logs`.
+and a `need syslog` in its `depend()`. BusyBox `syslogd` runs as a normal OpenRC service in the same runlevel, configured in `/etc/conf.d/syslog` to write a small rotating file:
 
-I lost more time than I'd like to admit to BusyBox `sed`. My first version of the prefix script was a one-liner piping through `sed`, which worked fine in testing – until I ran it in the actual container and nothing showed up in `docker logs`. BusyBox `sed` doesn't support `-u` for unbuffered output, so it buffers everything and the logs just... stop. The shell `read` loop flushes per line. Python also buffers stdout when it's not a TTY – the worker runs with `python -u` to fix that.
+```sh
+SYSLOGD_OPTS="-t -O /var/log/messages -s 4096 -b 2"
+```
+
+One catch: BusyBox `syslogd` writes either to a file or to its in-memory ring buffer, never both, and it has no "also print to stdout" mode. So the entrypoint runs `tail -F /var/log/messages &` before starting services, which puts the same lines on container stdout for `docker logs`. The file is just used as a buffer, so three 4 MB slices is plenty.
+
+What you get is the standard format any Alpine admin recognizes:
+
+```
+Aug 22 00:59:21 8cb21743dca9 user.notice worker: Worker started, polling for tasks...
+Aug 22 00:59:22 8cb21743dca9 daemon.notice webapp: INFO:     Application startup complete.
+```
+
+Timestamps, priority, the service name. `supervise-daemon` logs to syslog as well, so its restart and shutdown messages show up in the same stream, which I didn't get with the shell script. And this is the same `logger` and `syslogd` I'd be looking at on any Alpine box, but exported in a way that k8s or ECS can slurp them up properly.
 
 ## On not learning new things
 
