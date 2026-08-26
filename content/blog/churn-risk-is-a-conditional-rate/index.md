@@ -7,7 +7,7 @@ description: "My churn model answered the wrong question for two years, and ever
 summary: "My old churn model measured how surprising a user's silence was against their own history. That's a real question with a real answer, but it isn't churn risk: it flagged regulars who took a week off and ignored light users who'd quietly stopped. It passed every backtest for two years; a confused user in a focus group is what caught it. The replacement is the table banks use for late accounts – bin users by how long they've been gone and how much they normally use the product, count who came back – with the same empirical Bayes shrinkage as before, pointed at the right quantity this time."
 tags: ["statistical methods", "data analysis", "python", "bayesian statistics", "churn"]
 keywords: ["churn prediction", "churn risk", "empirical Bayes", "conditional churn rate", "shrinkage estimation", "calibration", "p-values", "surprisal", "Bühlmann credibility", "customer retention", "retention analysis", "customer analytics"]
-draft: true
+draft: false
 math: true
 toc: true
 ---
