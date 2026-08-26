@@ -13,7 +13,7 @@ toc: false
 
 Our most-hit endpoint answered one question: should this temp be shown this shift? Answering took about 200 milliseconds per shift – a for-loop over every business rule we'd ever had, each one appended by whoever needed it, none ever read again. At five open shifts, that's a fast enough page. At thirty thousand, it's a timeout. So someone "fixed" it: evaluate until you have one page of eleven shifts, then stop unless they ask for another page. 
 
-That line shipped in an afternoon and ran for years.
+That line took an hour to write and ran for years.
 
 ## The cap
 

@@ -1,7 +1,7 @@
 ---
 title: "An Empirical Bayes Approach to Churn Estimation"
 date: 2025-08-03T00:00:00Z
-lastmod: 2025-08-03T00:00:00Z
+lastmod: 2026-08-26T00:00:00Z
 authors: ["Rishi Kulkarni"]
 description: "A practical guide to building churn models using Empirical Bayes methods that simultaneously improve individual user estimates and control for multiple comparisons."
 abstract: "Traditional churn models often overthink the problem. This post presents a simple Empirical Bayes approach that estimates user-specific activity rates, naturally handles multiple comparisons through shrinkage, and directly answers the business question: who needs intervention now?"
@@ -10,6 +10,8 @@ keywords: ["Empirical Bayes", "churn prediction", "customer retention", "shrinka
 math: true
 toc: true
 ---
+
+> **Update, August 2026:** I no longer stand behind this approach. The model below measures how surprising a user's silence is against their own history, and in production that turned out to flag the users least likely to leave. I've written up what went wrong and what replaced it in [Churn Risk Is a Conditional Rate](/blog/churn-risk-is-a-conditional-rate/). The original post is left as written.
 
 ## Everyone Wants a Churn Model
 
